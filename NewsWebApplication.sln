@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsWeb", "NewsWeb\NewsWeb.csproj", "{B35588E1-2384-467E-9977-C1B4C8DC1F1D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Access.Library", "Data.Access.Library\Data.Access.Library.csproj", "{766E5896-E1B7-42A4-A303-9282871FE437}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{70E0BCF9-D60F-4F27-AF27-E0E2CA34CD1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B35588E1-2384-467E-9977-C1B4C8DC1F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B35588E1-2384-467E-9977-C1B4C8DC1F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B35588E1-2384-467E-9977-C1B4C8DC1F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B35588E1-2384-467E-9977-C1B4C8DC1F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{766E5896-E1B7-42A4-A303-9282871FE437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{766E5896-E1B7-42A4-A303-9282871FE437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{766E5896-E1B7-42A4-A303-9282871FE437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{766E5896-E1B7-42A4-A303-9282871FE437}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70E0BCF9-D60F-4F27-AF27-E0E2CA34CD1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70E0BCF9-D60F-4F27-AF27-E0E2CA34CD1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70E0BCF9-D60F-4F27-AF27-E0E2CA34CD1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70E0BCF9-D60F-4F27-AF27-E0E2CA34CD1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D07319B0-DDD0-402A-B12E-BFD3E75F6A70}
+	EndGlobalSection
+EndGlobal

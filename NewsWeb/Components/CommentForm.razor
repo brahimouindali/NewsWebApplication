@@ -1,0 +1,141 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject CommentService commentService
+
+@{ int count = 0; }
+@if (comments.Count() > 0)
+{
+    <p>Commentaires des visiteurs <span class="text-muted">(@comments.Count())</span></p>
+    @foreach (var item in comments)
+    {
+        { count++; }
+        <div class="comment-list">
+            <h6 class="text-red">@count @item.Name</h6>
+            <span style="display: block;font-size: 11px;color: #777;">
+                @item.CommentAt.ToString("dddd, dd MMMM yyyy HH:mm")
+            </span>
+            <div class="article-comment">
+                <p> @item.CommentsDetail</p>
+            </div>
+            <div class="row">
+                <div class="col-6 like">
+                    <span @onclick="(e => EditUp(item))">
+                        <i class="fas fa-thumbs-up text-green"></i>
+                    </span>
+
+                    <span @onclick="(e => EditDown(item))">
+                        <i class="fas fa-thumbs-down text-red"></i>
+                    </span>
+                    <span class="text-right bg-white">@avgLike(item.Id)</span>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p style="color:red;">Soyez le premier à commenter</p>
+}
+
+
+<div class="alert-success text-center mt-0" style="display: @noneblock">
+    <h4 class="text-red">merci pour votre commentaire</h4>
+</div>
+
+<div class="@hidden">
+    <EditForm OnValidSubmit="Send" Model="@Comment">
+        <DataAnnotationsValidator />
+        @*<ValidationSummary />*@
+        <div class="form-group">
+            <label for="name"> Name <span> *</span></label>
+            <InputText @bind-Value="Comment.Name" id="name" class="form-control bg-gray" />
+            <ValidationMessage For="@(() => Comment.Name)" class="text-red" />
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title<span> *</span></label>
+            <InputText @bind-Value="Comment.Title" id="title" class="form-control bg-gray" />
+            <ValidationMessage For="@(() => Comment.Title)" class="text-red" />
+        </div>
+
+        <div class="form-group">
+            <label for="email">email<span> *</span></label>
+            <InputText @bind-Value="Comment.email" id="email" class="form-control bg-gray" />
+            <ValidationMessage For="@(() => Comment.email)" class="text-red" />
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Detail</label>
+            <InputTextArea @bind-Value="Comment.CommentsDetail" Id="comment" class="form-control bg-gray" rows="9" />
+            @*<textarea @bind="Comment.CommentsDetail" id="comment" class="form-control bg-gray" rows="9"></textarea>*@
+            <ValidationMessage For="@(() => Comment.CommentsDetail)" class="text-red" />
+        </div>
+
+        <div class="form-group">
+            <button type="submit" @onclick="Send" class="btn btn-send-comment">Commentaire</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; }
+
+    private Comment Comment = new Comment();
+    private List<Comment> comments = new List<Comment>();
+    int counter = 0;
+    string hidden = "";
+    string noneblock = "none";
+
+    void Send()
+    {
+        Comment.ArticleId = Id;
+        Comment.CommentAt = DateTime.Now;
+        Comment.Like = Comment.Deslike = 0;
+        this.commentService.Insert(this.Comment);
+        this.comments.Add(this.Comment);
+        hidden = "hidden";
+        noneblock = "block";
+    }
+
+    async Task<List<Comment>> getComments()
+    {
+        var commentsInDb = commentService.getAll();
+        return comments = commentsInDb.Where(a => a.ArticleId == Id).OrderBy(c => c.CommentAt).ToList();
+    }
+
+    protected override async void OnInitialized()
+    {
+        await getComments();
+    }
+
+    void EditUp(Comment comment)
+    {
+        counter = this.commentService.Like(comment.Id);
+        comment.Like = ++counter;
+        this.commentService.Update(comment);
+    }
+
+    void EditDown(Comment comment)
+    {
+        counter = this.commentService.DesLike(comment.Id);
+        comment.Deslike = --counter;
+        this.commentService.Update(comment);
+    }
+
+    int avgLike(Guid id)
+    {
+        try
+        {
+            if (id != null)
+            {
+                var like = this.commentService.Like(id);
+                var deslike = this.commentService.DesLike(id);
+                return like + deslike;
+            }
+            return 0;
+        }
+        catch { return 0; };
+    }
+}

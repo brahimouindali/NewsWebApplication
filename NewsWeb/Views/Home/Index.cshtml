@@ -1,0 +1,42 @@
+﻿@inject NewsWeb.Services.CategoryService categoryService
+@model IEnumerable<Article>
+@{
+    ViewData["Title"] = "Braoui";
+}
+
+@if (ViewBag.query != null && ViewBag.isFound == true)
+{
+    <h6>Le resultat de <span class="text-red">"@ViewBag.query"</span></h6>
+}
+
+@* else if (ViewBag.query != null && ViewBag.isFound == false)
+    {
+
+    }*@
+
+<div class="row">
+    @if (User.IsInRole(RoleName.AdminsRole) || User.IsInRole(RoleName.WritersRole))
+    {
+        <div class="col-lg-8 col-md-12">
+            <a asp-action="Create" asp-controller="Articles" class="btn btn-info btn-sm btn-block mb-2">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> New
+            </a>
+        </div>
+    }
+
+    @(await Html.RenderComponentAsync<ArticlesSlide>(RenderMode.Static, new { Articles = Model }))
+    <div class="aside px-2 col-lg-4 col-md-3">
+        @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))
+    </div>
+</div>
+
+<div>
+    @{ var categories = categoryService.getCategories(); }
+    @if (categories.Count() > 0)
+    {
+        @foreach (var item in categories)
+        {
+            @(await Html.RenderComponentAsync<ArticlesparCategory>(RenderMode.ServerPrerendered, new { name = item.Name }))
+        }
+    }
+</div>

@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject RatingService ratingService
+
+
+@for (int i = 0; i < 5; i++)
+{
+    var index = i + 1;
+    if (index <= avg)
+    {
+        <span class="fa fa-star" style="color: #fbc531;" @onclick="(() => Rate(index))"></span>
+    }
+    else
+    {
+        <span class="fa fa-star star-opacity" @onclick="(() => Rate(index))"></span>
+    }
+}
+
+@code {
+    [Parameter] public string Id { get; set; }
+
+    int avg = 0;
+
+    List<Rating> ratings = new List<Rating>();
+    void Rate(int stars)
+    {
+        var rating = new Rating
+        {
+            Ratings = stars,
+            ArticleId = Id
+        };
+
+        ratingService.Insert(rating);
+        try
+        {
+            avg = ratingService.countRatings(Id) ? stars : (avg + stars) / 2;
+        }
+        catch (Exception)
+        {
+
+            avg = stars;
+        }
+
+    }
+
+    async Task GetRating()
+    {
+        var ratingsInDb = ratingService.GetRatings();
+        ratings = ratingsInDb.Where(r => r.ArticleId == Id).ToList();
+
+        if (ratings != null)
+        {
+            List<int> r = new List<int>();
+
+            foreach (var item in ratings)
+            {
+                r.Add(item.Ratings);
+            }
+
+            var sum = r.Sum();
+            var count = r.Count();
+            avg = count == 0 ? 0 : sum / count;
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            await GetRating();
+        }
+        catch (Exception)
+        {
+            await GetRating();
+        }
+
+    }
+}

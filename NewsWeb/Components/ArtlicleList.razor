@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using NewsWeb.Services
+@using Data.Access.Library.Model
+@using Microsoft.AspNetCore.Components.Routing
+@inject ArticleService articleService
+@inject RatingService ratingService
+
+@*<div class="aside px-2 col-lg-4 col-md-3">*@
+    <nav class="navbar navbar-expand-lg p-0">
+        <ul class="navbar-nav" style="width: 100%;height: 100%">
+            <li class="nav-item text-uppercase" style="width: 50%;background:@bgColor!important;" @onclick="(e => show(1))">
+                <a class="nav-link text-black text-center" style="cursor: pointer">Les plus lus</a>
+            </li>
+            <li class="nav-item text-uppercase" style="width: 50%;background:@bgColor1!important;" @onclick="(e => show(2))">
+                <a class="nav-link text-black text-center" style="cursor: pointer">Les plus notés</a>
+            </li>
+        </ul>
+    </nav>
+
+    @if (!isShow)
+    {
+        <ul class="list-group" id="header1">
+            @foreach (var article in articlesPlusLus)
+            {
+                string link = $"articles/details/{@article.Id}";
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-primary badge-pill">@article.PublishedAt.ToString("HH:mm")</span>
+                    <NavLink class="ml-2" href="@link">
+                        <div> @article.Titre</div>
+                    </NavLink>
+                </li>
+            }
+        </ul>
+    }
+    @if (isShow)
+    {
+        <ul class="list-group" id="header2">
+            @foreach (var article in articlesPlusNote)
+            {
+                string link = $"articles/details/{@article.Id}";
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="badge badge-primary badge-pill">@article.PublishedAt.ToString("HH:mm")</span>
+                    <NavLink class="ml-2" href="@link">
+                        <div> @article.Titre</div>
+                    </NavLink>
+                </li>
+            }
+        </ul>
+    }
+@*</div>*@
+
+
+@code {
+    List<Article> articlesPlusLus = new List<Article>();
+    List<Article> articlesPlusNote = new List<Article>();
+    bool isShow = false;
+
+    string bgColor = "#007bff;color:#fff;border-top-right-radius: 30%;";
+    string bgColor1 = "#87dfd6;border-top-left-radius: 30%";
+
+    async Task getArticles()
+    {
+        var articles = articleService.GetArticles();
+        articlesPlusLus = articles.OrderByDescending(a => a.NombreVisites).Take(5).ToList();
+
+        var ratings = ratingService.GetRatings();
+        var artIds = ratings.OrderByDescending(r => r.Ratings).Select(r => r.ArticleId).Take(5);
+
+        articlesPlusNote = articles
+                          .Where(a => artIds.Contains(a.Id)).Take(5).ToList();
+    }
+
+    void show(int header)
+    {
+        if (header == 2)
+        {
+            isShow = true;
+            bgColor = "#87dfd6;border-top-right-radius: 30%";
+            bgColor1 = "#007bff;color:#fff;border-top-left-radius: 30%;";
+        }
+        else
+        {
+            isShow = false;
+            bgColor = "#007bff;color:#fff;border-top-right-radius: 30%;";
+            bgColor1 = "#87dfd6;border-top-left-radius: 30%";
+        }
+    }
+
+    protected override async void OnInitialized()
+    {
+        await getArticles();
+    }
+}

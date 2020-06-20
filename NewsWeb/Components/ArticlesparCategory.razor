@@ -1,0 +1,77 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using NewsWeb.Services
+@using Data.Access.Library.Model
+@inject ArticleService articleService
+
+@{ int i = 0; string link = articles.Count() > 0 ? $"articles/details/{articles[i].Id}" : "";}
+
+<div class="container">
+    <hr class="ligne-top" style="background-color: @bg_ligne_top[i]" />
+    <div class="row">
+        <div class="col-4 shadow">
+            <div class="right-element">
+                <a href="@link">
+                    <img class="imgs" src="img/@articles[i].ImageUrl">
+                </a>
+                <span class="btn category-name">@name</span>
+            </div>
+            <div class="titre">
+                <a href="@link">
+                    <span class="arti-titre">@articles[i].Titre</span>
+                </a>
+            </div>
+        </div>
+        @{ i++;}
+        <div class="col-8">
+            <div class="row mb-4" style="height: 45%;">
+                <div class="col-6 shadow">
+                    <a href="articles/details/@articles[i].Id">
+                        <img class="imgs" src="img/@articles[i].ImageUrl" style="max-height: 100px;">
+                        <span class="titre-right ml-3 mt-2">@articles[i].Titre</span>
+                    </a>
+                </div>
+                @{ i++; }
+                <div class="col-6 shadow">
+                    <a href="articles/details/@articles[i].Id">
+                        <img class="imgs" src="img/@articles[i].ImageUrl" style="max-height: 100px;">
+                        <span class="titre-right ml-3 mt-2">@articles[i].Titre</span>
+                    </a>
+                </div>
+            </div>
+            @{ i++; }
+            <div class="row" style="height: 45%;">
+                <div class="col-6 shadow">
+                    <a href="articles/details/@articles[i].Id">
+                        <img class="imgs" src="img/@articles[i].ImageUrl" style="max-height: 100px;">
+                        <span class="titre-right ml-3 mt-2">@articles[i].Titre</span>
+                    </a>
+                </div>
+                @{ i++; }
+                <div class="col-6 shadow">
+                    <a href="articles/details/@articles[i].Id">
+                        <img class="imgs" src="img/@articles[i].ImageUrl" style="max-height: 100px;">
+                        <span class="titre-right ml-3 mt-2">@articles[i].Titre</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string name { get; set; }
+
+    private List<Article> articles = new List<Article>();
+    string[] bg_ligne_top = { "#fa5", "#b05", "#bb5", "#0ff", "#4f9" };
+
+    public IEnumerable<Article> GetArticles()
+    {
+        var articlesInDb = articleService.ArticlesOfCategory(name);
+        return articles = articlesInDb.Take(5).ToList();
+    }
+
+    protected override void OnInitialized()
+    {
+        GetArticles();
+    }
+}

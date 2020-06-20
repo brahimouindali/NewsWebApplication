@@ -1,0 +1,144 @@
+﻿@model ArticleCommentsViewModel
+@inject NewsWeb.Services.ArticleService articleService
+@inject NewsWeb.Services.CategoryService categoryService
+
+@{
+    ViewData["Title"] = Model.Article.Titre;
+    var text = Model.Article.Content;
+    var para = text.Split(".");
+}
+<div class="row">
+    <div class="col-lg-8 col-md-12 bg-white" style="padding: 20px 15px">
+        <div class="shadow-sm">
+            <div style="padding: 0 15px">
+                <div>
+                    <p class="titre-article">
+                        @Html.DisplayFor(model => model.Article.Titre)
+                    </p>
+                </div>
+                <div class="row" style="margin: 0 auto; display: flex; justify-content: space-between">
+                    <div class="col-sm name-time-category">
+                        <i class="fa fa-user-edit">
+                        </i>@Html.DisplayFor(model => model.Article.Publisher.Name)
+                    </div>
+                    <div class="col-sm name-time-category" style="font-size: 12px">
+                        <i class="fa fa-clock"></i>
+                        @{
+                            string date = Model.Article.PublishedAt.ToString("dd/MMMM/yyyy H:mm");
+                        }
+                        <span>   @Html.DisplayFor(model => @date)</span>
+                    </div>
+                    <div class="col-sm name-time-category">
+                        <i class="fa fa-tags"></i>
+                        <a asp-action="@Model.Category.Name" asp-controller="Home" style="color: black;">
+                            @Html.DisplayFor(model => model.Category.Name)
+                        </a>
+                    </div>
+                    <div class="col-sm name-time-category">
+                        @(await Html.RenderComponentAsync<Ratings>(RenderMode.ServerPrerendered, new { Id = Model.Article.Id }))
+                    </div>
+                </div>
+                <partial name="~/Views/_SocialMedia.cshtml" />
+
+                <div>
+                    <img src="~/img/@Model.Article.ImageUrl" alt="@Model.Article.ImageUrl" style="width: 100%; margin: 0 auto" />
+                </div>
+                <div class="article-content">
+                    <p style="font-family: Georgia,Times," Times New Roman",serif !important;">
+                        @{ int i = 0;}
+
+                        @foreach (var item in para)
+                        {
+                            if (i == 0)
+                            {
+                                if (item != "")
+                                {
+                                <p style="line-height: 1.6">
+                                    <strong>@item.</strong>
+                                </p>
+                            }
+                            { i++; }
+                        }
+                        else
+                        {
+                            if (item != "")
+                            {
+                                <p class="article-detail">@item.</p>
+                            }
+                            { i++; }
+                        }
+                    }
+                        </p>
+                    </div>
+
+                </div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole(RoleName.AdminsRole) || User.IsInRole(RoleName.WritersRole))
+                    {
+                        <hr />
+                        <div class="row">
+                            <div class="col-6">
+                                <span class="btn btn-info btn-sm btn-block">
+                                    <a class="text-white" asp-action="edit" asp-route-id="@Model.Article.Id">Edit</a>
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <span class="btn btn-danger btn-sm btn-block">
+                                    <a data-toggle="modal" data-target="#exampleModal" style="cursor: pointer">Delete</a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">@Model.Article.Titre</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        êtes-vous sûr de vouloir supprimer cet article
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <form asp-action="Delete" asp-route-id="@Model.Article.Id">
+                                            <input type="submit" class="btn btn-danger" value="Delete" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <hr />
+                <partial name="~/Views/_SocialMedia.cshtml" />
+
+                @*<a href="http://graph.facebook.com/?ids=https://localhost:44315/articles/details/Facebook-s-offre-la-plateforme-Giphy-pour-400-millions-de-dollars">Share on facebook</a>
+                    <a href="http://urls.api.twitter.com/1/urls/count.json?url=https://localhost:44315/articles/details/Facebook-s-offre-la-plateforme-Giphy-pour-400-millions-de-dollars">Share on twitter</a>*@
+
+            </div>
+            <div class="container">
+                @(await Html.RenderComponentAsync<CommentForm>(RenderMode.ServerPrerendered, new { Id = Model.Article.Id }))
+            </div>
+        </div>
+
+        <div class="aside px-2 col-lg-4 col-md-3">
+            @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))
+        </div>
+    </div>
+
+    <div>
+        @{ var categories = categoryService.getCategories(); }
+        @if (categories.Count() > 0)
+        {
+            @foreach (var item in categories)
+            {
+                @(await Html.RenderComponentAsync<ArticlesparCategory>(RenderMode.ServerPrerendered, new { name = item.Name }))
+            }
+        }
+    </div>

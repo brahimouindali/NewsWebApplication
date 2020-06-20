@@ -1,0 +1,22 @@
+﻿@model ArticleCommentsViewModel
+
+@{
+    ViewBag.Title = Model.Article.Titre;
+}
+
+<div class="container">
+    <div class="card">
+           <div class="card-img" style="background-image: url('img/@Model.Article.ImageUrl');height: 500px;width: 100%; background-repeat: no-repeat;background-size: cover"></div>            
+        <div class="card-body">
+            <h3 class="card-title">@Html.DisplayFor(model => model.Article.Titre)</h3>
+            <div class="card-text">
+                @Html.DisplayFor(model => model.Article.Content)
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="delete">
+    <input type="hidden" asp-for="Article.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
