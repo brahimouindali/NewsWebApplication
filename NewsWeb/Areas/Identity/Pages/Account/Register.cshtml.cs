@@ -90,7 +90,6 @@ namespace NewsWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var user = new AppUser
                 {
                     UserName = Input.Email,
@@ -105,7 +104,7 @@ namespace NewsWeb.Areas.Identity.Pages.Account
                 {
                     _roleManager.CreateAsync(new IdentityRole(RoleName.AdminsRole)).GetAwaiter().GetResult();
                     _roleManager.CreateAsync(new IdentityRole(RoleName.WritersRole)).GetAwaiter().GetResult();
-                    _roleManager.CreateAsync(new IdentityRole(RoleName.UsersRole)).GetAwaiter().GetResult();
+                    _roleManager.CreateAsync(new IdentityRole(RoleName.EditorRole)).GetAwaiter().GetResult();
                 }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -123,13 +122,13 @@ namespace NewsWeb.Areas.Identity.Pages.Account
                         }
                         else
                         {
-                            if (roleName == RoleName.UsersRole)
+                            if (roleName == RoleName.EditorRole)
                             {
-                                await _userManager.AddToRoleAsync(user, RoleName.UsersRole);
+                                await _userManager.AddToRoleAsync(user, RoleName.EditorRole);
                             }
                             else
                             {
-                                await _userManager.AddToRoleAsync(user, RoleName.UsersRole);
+                                await _userManager.AddToRoleAsync(user, RoleName.EditorRole);
                             }
                         }
                     }

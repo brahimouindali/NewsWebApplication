@@ -15,7 +15,7 @@
                         <h3 class="col-12 text-success text-center py-4">
                             <strong>Sign Up</strong>
                         </h3>
-                        <hr />
+                        <hr class="bg-danger" />
                         <div class="form-row py-2">
                             <div class="col">
                                 <div>
@@ -38,17 +38,40 @@
                             <input type="text" asp-for="Input.PhoneNumber" placeholder="Enter your phone number here" class="form-control" />
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
-                        <div class="py-2">
-                            <input type="password" asp-for="Input.Password" placeholder="Enter your password here" class="form-control" />
+                        @*<div class="py-2">
+                                <input type="password" asp-for="Input.Password" placeholder="Enter your password here" class="form-control" />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="py-2">
+                                <input type="password" asp-for="Input.ConfirmPassword" placeholder="Confirm password" class="form-control" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>*@
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="password" class="form-control" asp-for="Input.Password" id="txtPw" placeholder="Enter your password here" />                            <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1" onclick="togglePw()">
+                                        <i class="fas fa-eye" id="eyePw"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
-                        <div class="py-2">
-                            <input type="password" asp-for="Input.ConfirmPassword" placeholder="Confirm password" class="form-control" />
+
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="password" class="form-control" asp-for="Input.ConfirmPassword" id="txtCPw" placeholder="Confirm password" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon2" onclick="toggleCPw()">
+                                        <i class="fas fa-eye" id="eyeCPw"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
+
                         <div class="py-2">
                             <select class="form-control" name="rolesname">
-                                <option value="@RoleName.UsersRole">@RoleName.UsersRole</option>
+                                <option value="@RoleName.EditorRole">@RoleName.EditorRole</option>
                                 <option value="@RoleName.AdminsRole">@RoleName.AdminsRole</option>
                                 <option value="@RoleName.WritersRole">@RoleName.WritersRole</option>
                             </select>
@@ -57,7 +80,7 @@
                             <button type="submit" class="btn btn-success form-control">Register</button>
                         </div>
                         <hr />
-                        <p>By clicking <em>Register</em> you agree to our <a href="#" target="_blank">terms of service</a></p>
+                        <p>By clicking <em>Register</em> you agree to our <a href="#">terms of service</a></p>
                     </div>
                 </div>
             </div>
@@ -103,4 +126,30 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePw() {
+            let txtPw = document.getElementById("txtPw"),
+                eyePw = document.getElementById("eyePw");
+
+            if (txtPw.type === "password") {
+                txtPw.type = "text";
+                eyePw.className = "fas fa-eye-slash";
+            } else {
+                txtPw.type = "password";
+                eyePw.className = "fas fa-eye";
+            }
+        }
+        function toggleCPw() {
+            let txtCPw = document.getElementById("txtCPw"),
+                eyeCPw = document.getElementById("eyeCPw");
+
+            if (txtCPw.type === "password") {
+                txtCPw.type = "text";
+                eyeCPw.className = "fas fa-eye-slash";
+            } else {
+                txtCPw.type = "password";
+                eyeCPw.className = "fas fa-eye";
+            }
+        }
+    </script>
 }

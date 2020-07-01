@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject UserService userService
+
+<table id="users" class="table table-bordered">
+    <thead>
+        <tr>
+            <td> First Name </td>
+            <td> Last Name </td>
+            <td> Email </td>
+            <td>Lock / Unlock</td>
+            <td>Delete</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td> @user.FirstName </td>
+                <td> @user.LastName </td>
+                <td> @user.Email </td>
+                <td>
+                    @if (user.LockoutEnabled)
+                    {
+                        <button class="btn btn-success" @onclick="(() => LockUnlock(user.Id))">
+                            <i class="fas fa-lock-open"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger" @onclick="(() => LockUnlock(user.Id))">
+                            <i class="fas fa-lock"></i>
+                        </button>
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-light" @onclick="(()=> Delete(user.Id))">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    List<AppUser> users = new List<AppUser>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        users = userService.GetUsers().ToList();
+    }
+
+    void LockUnlock(string id)
+    {
+        userService.LockUnlockUser(id);
+    }
+
+    void Delete(string id)
+    {
+        userService.DeleteUser(id);
+        users = userService.GetUsers().ToList();
+    }
+}

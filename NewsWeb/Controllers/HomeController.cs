@@ -5,6 +5,7 @@ using System.Linq;
 using BLL;
 using Data.Access.Library.Interfaces;
 using Data.Access.Library.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsWeb.Models;
@@ -16,13 +17,15 @@ namespace NewsWeb.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork<Article> _article;
         private readonly IUnitOfWork<Category> _category;
+        private readonly IUnitOfWork<AppUser> _user;
 
         public HomeController(ILogger<HomeController> logger,
-            IUnitOfWork<Article> article, IUnitOfWork<Category> category)
+            IUnitOfWork<Article> article, IUnitOfWork<Category> category, IUnitOfWork<AppUser> user)
         {
             _logger = logger;
             _article = article;
             _category = category;
+            _user = user;
             ViewBag.Categories = getCategories();
         }
 
@@ -40,6 +43,14 @@ namespace NewsWeb.Controllers
         {
             var articles = _article.Entity.GetAll().OrderByDescending(d => d.PublishedAt).Take(9);
             return View(articles);
+        }
+
+        [Route("/users")]
+        [Authorize(Roles = RoleName.AdminsRole)]
+        public IActionResult Users()
+        {
+            var users = _user.Entity.GetAll();
+            return View(users);
         }
 
         public IActionResult Search(string query)
@@ -122,14 +133,14 @@ namespace NewsWeb.Controllers
         }
 
         public IActionResult Privacy()
-    {
-        return View();
-    }
+        {
+            return View();
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
-}
 }

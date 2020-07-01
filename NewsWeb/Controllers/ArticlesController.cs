@@ -1,4 +1,5 @@
-﻿using Data.Access.Library.Interfaces;
+﻿using BLL;
+using Data.Access.Library.Interfaces;
 using Data.Access.Library.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsWebsite.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NewsWeb.Controllers
 {
@@ -19,6 +22,7 @@ namespace NewsWeb.Controllers
         private readonly IUnitOfWork<Publisher> _publisher;
         private readonly IUnitOfWork<Comment> _comment;
         private readonly IUnitOfWork<Category> _category;
+        private readonly IUnitOfWork<AppUser> _user;
         private readonly IHostingEnvironment _hosting;
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -26,6 +30,7 @@ namespace NewsWeb.Controllers
                 IUnitOfWork<Publisher> publisher,
                 IUnitOfWork<Comment> comment,
                 IUnitOfWork<Category> category,
+                IUnitOfWork<AppUser> user,
                 IHostingEnvironment hosting,
                 UserManager<IdentityUser> UserManager)
         {
@@ -33,14 +38,22 @@ namespace NewsWeb.Controllers
             _publisher = publisher;
             _comment = comment;
             _category = category;
+            _user = user;
             _hosting = hosting;
             _userManager = UserManager;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var publishers = _publisher.Entity.GetAll();
             var categories = _category.Entity.GetAll();
+
+            var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
+            var users = new List<AppUser>();
+            foreach (var user in usersInWriterRole)
+            {
+                users.Add(user as AppUser);
+            }
+            var publishers = users;
 
             ArticleViewModel model = new ArticleViewModel
             {
@@ -73,7 +86,7 @@ namespace NewsWeb.Controllers
                 string myStr = model.Titre;
                 string titre = Regex.Replace(myStr, "[^a-zA-Z0-9_]+", "-");
                 string id = Regex.Replace(titre, " ", "-");
-                              
+
 
                 Article article = new Article
                 {
@@ -81,7 +94,7 @@ namespace NewsWeb.Controllers
                     Titre = model.Titre,
                     Content = model.Content,
                     CategoryId = model.CategoryId,
-                    PublisherId = model.PublisherId,
+                    AppUserId = model.PublisherId,
                     ImageUrl = model.File.FileName,
                     PublishedAt = DateTime.Now
                 };
@@ -102,8 +115,8 @@ namespace NewsWeb.Controllers
                 {
                     var categories = _category.Entity.GetAll();
                     var category = categories.Where(c => c.Id == article.CategoryId).FirstOrDefault();
-                    var publishers = _publisher.Entity.GetAll();
-                    var publisher = publishers.Where(p => p.Id == article.PublisherId).FirstOrDefault();
+                    var publishers = _user.Entity.GetAll();
+                    var publisher = publishers.Where(p => p.Id == article.AppUserId).FirstOrDefault();
 
                     //Retreving userId
                     //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
@@ -136,9 +149,16 @@ namespace NewsWeb.Controllers
             {
                 return NotFound();
             }
-            var article = _article.Entity.GetById(id);
-            var publishers = _publisher.Entity.GetAll();
+            var article = _article.Entity.GetById(id);            
             var categories = _category.Entity.GetAll();
+
+            var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
+            var users = new List<AppUser>();
+            foreach (var user in usersInWriterRole)
+            {
+                users.Add(user as AppUser);
+            }
+            var publishers = users;
 
             if (article == null)
             {
@@ -154,7 +174,7 @@ namespace NewsWeb.Controllers
                 Categories = categories,
                 PublishedAt = article.PublishedAt,
                 CategoryId = article.CategoryId,
-                PublisherId = article.PublisherId
+                PublisherId = article.AppUserId
             };
             return View(model);
         }
@@ -190,7 +210,7 @@ namespace NewsWeb.Controllers
                         Id = ida,
                         Titre = model.Titre,
                         Content = model.Content,
-                        PublisherId = model.PublisherId,
+                        AppUserId = model.PublisherId,
                         ImageUrl = model.File != null ? model.File.FileName : model.ImageUrl,
                         CategoryId = model.CategoryId,
                         PublishedAt = model.PublishedAt
@@ -224,8 +244,8 @@ namespace NewsWeb.Controllers
             var categoryInDb = _category.Entity.GetAll();
             var category = categoryInDb.Where(c => c.Id == article.CategoryId).FirstOrDefault();
 
-            var publisherInDb = _publisher.Entity.GetAll();
-            var publisher = publisherInDb.Where(p => p.Id == article.PublisherId).FirstOrDefault();
+            var publisherInDb = _user.Entity.GetAll();
+            var publisher = publisherInDb.Where(p => p.Id == article.AppUserId).FirstOrDefault();
 
             var articleViewModel = new ArticleCommentsViewModel
             {
@@ -244,7 +264,7 @@ namespace NewsWeb.Controllers
         {
             _article.Entity.Delete(id);
             _article.Save();
-            return RedirectToAction("index","home");
+            return RedirectToAction("index", "home");
         }
 
         private bool ArticleExists(string id)

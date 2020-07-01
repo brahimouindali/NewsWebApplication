@@ -7,7 +7,7 @@ namespace NewsWebsite.ViewModels
     {
         public Article Article { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
-        public Publisher Publisher { get; set; }
+        public AppUser Publisher { get; set; }
         public Category Category { get; set; }
     }
 }

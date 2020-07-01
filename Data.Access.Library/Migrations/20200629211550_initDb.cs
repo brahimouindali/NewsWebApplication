@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Access.Library.Migrations
 {
-    public partial class initialDb : Migration
+    public partial class initDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,20 +59,6 @@ namespace Data.Access.Library.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Publishers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "NewId()"),
-                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    ImageUrl = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Publishers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,7 +174,7 @@ namespace Data.Access.Library.Migrations
                     Id = table.Column<string>(nullable: false),
                     Titre = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
                     Content = table.Column<string>(type: "varchar(Max)", nullable: false),
-                    PublisherId = table.Column<Guid>(nullable: false),
+                    AppUserId = table.Column<string>(nullable: false),
                     ImageUrl = table.Column<string>(type: "varchar(200)", nullable: true),
                     PublishedAt = table.Column<DateTime>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false),
@@ -198,15 +184,15 @@ namespace Data.Access.Library.Migrations
                 {
                     table.PrimaryKey("PK_Articles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Articles_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Articles_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Articles_Publishers_PublisherId",
-                        column: x => x.PublisherId,
-                        principalTable: "Publishers",
+                        name: "FK_Articles_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -256,14 +242,14 @@ namespace Data.Access.Library.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Articles_AppUserId",
+                table: "Articles",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Articles_CategoryId",
                 table: "Articles",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Articles_PublisherId",
-                table: "Articles",
-                column: "PublisherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -342,16 +328,13 @@ namespace Data.Access.Library.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Articles");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Publishers");
+                name: "Categories");
         }
     }
 }

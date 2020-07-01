@@ -1,0 +1,24 @@
+﻿@model IEnumerable<AppUser>
+
+@{
+    ViewData["Title"] = "Manage users";
+}
+
+@if (User.IsInRole(RoleName.AdminsRole))
+{
+    @(await Html.RenderComponentAsync<LockOrUnlockUser>(RenderMode.ServerPrerendered))
+
+    <div class="alert alert-success">
+        <a href="identity/account/register" target="_blank">Register</a> new user
+    </div>
+}
+
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+        });
+    </script>
+}

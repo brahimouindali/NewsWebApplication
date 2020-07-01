@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using NewsWeb.Services;
 using System;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NewsWeb
 {
@@ -38,8 +39,10 @@ namespace NewsWeb
                 .AddDefaultTokenProviders() // To generate emails
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
             services.Configure<SecurityStampValidatorOptions>(options =>
-            options.ValidationInterval = TimeSpan.FromDays(150));
+                options.ValidationInterval = TimeSpan.FromDays(150)
+            );
 
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(Configuration.GetConnectionString("NewsWebsitecnxString")));
@@ -52,6 +55,7 @@ namespace NewsWeb
             services.AddScoped<RatingService>();
             services.AddScoped<ArticleService>();
             services.AddScoped<CategoryService>();
+            services.AddScoped<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

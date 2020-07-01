@@ -13,11 +13,15 @@ namespace NewsWeb.Services
     {
         private readonly IUnitOfWork<Article> _article;
         private readonly IUnitOfWork<Category> _category;
+        private readonly IUnitOfWork<Rating> _rating;
 
-        public ArticleService(IUnitOfWork<Article> article, IUnitOfWork<Category> category)
+        public ArticleService(IUnitOfWork<Article> article,
+            IUnitOfWork<Category> category,
+            IUnitOfWork<Rating> rating)
         {
             _article = article;
             _category = category;
+            _rating = rating;
         }
 
         public IEnumerable<Article> GetArticles()
@@ -41,6 +45,17 @@ namespace NewsWeb.Services
             var category = categoryInDb.Where(c => c.Name == categoryName).FirstOrDefault();
             var articleInDb = _article.Entity.GetAll();
             return articleInDb.Where(a => a.CategoryId == category.Id);
+        }
+
+        public IEnumerable<Article> ArticlesPlusLus() =>
+         GetArticles().OrderByDescending(a => a.NombreVisites).Take(5);
+
+        public IEnumerable<Article> ArticlesPlusNote()
+        {
+            var ratings = _rating.Entity.GetAll();
+            var artIds = ratings.OrderByDescending(r => r.Ratings).Select(r => r.ArticleId).Take(5);
+
+            return GetArticles().Where(a => artIds.Contains(a.Id)).Take(5).ToList();
         }
     }
 }

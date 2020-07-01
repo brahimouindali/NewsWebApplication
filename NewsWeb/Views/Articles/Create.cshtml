@@ -12,14 +12,46 @@
                 <input id="titre" asp-for="Titre" placeholder="titre de l'article" class="form-control" />
                 <span asp-validation-for="Titre" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <textarea rows="20" asp-for="Content" class="form-control"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            
+
+            <div class="form-group">
+                <div class="setting image_picker">
+                    <h2>Image</h2>
+                    <div class="settings_wrap">
+                        <label class="drop_target">
+                            <div class="image_preview"></div>
+                            <input type="file" id="inputFile" asp-for="File" />
+                        </label>
+                        <div class="settings_actions vertical">
+                            <a data-action="choose_from_uploaded">
+                                <i class="fa fa-picture-o"></i>
+                                Choose from Uploads
+                            </a><a class="disabled" data-action="remove_current_image">
+                                <i class="fa fa-ban"></i>
+                                Remove Current Image
+                            </a>
+                        </div>
+                        @*<div class="image_details">*@
+                        @*  <label class="input_line image_title">
+                                <input type="text" placeholder="Title" />
+                            </label>*@
+                        <!--label.input_line.image_alt//input(type='text' placeholder='Alternative Text')
+                        -->
+                        <!--a.confirm(data-action='confirm_image_details')//i.fa.fa-check-circle
+                        -->
+                        @*</div>*@
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
-                <div class="col-md-5">
-                    <div class="form-group">                        
+                <div class="col-md-6">
+                    <div class="form-group">
                         <select asp-for="CategoryId" class="form-control"
                                 asp-items="@(new SelectList(Model.Categories,"Id", "Name"))">
                             <option>Please select category</option>
@@ -27,19 +59,26 @@
                         <span asp-validation-for="CategoryId" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-2">
+
+                @*<div class="col-md-2">
+                        <div class="form-group">
+                            <label>
+                                <input asp-for="File" type="file" style="display:none;" />
+                                <span class="btn-sm btn btn-primary">choose</span>
+                            </label>
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        </div>
+                    </div>*@
+
+
+
+
+
+
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label>
-                            <input asp-for="File" type="file" style="display:none;" />
-                            <span class="btn-sm btn btn-primary">choose</span>
-                        </label>
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="form-group">                        
                         <select asp-for="PublisherId" class="form-control"
-                                asp-items="@(new SelectList(Model.Publishers,"Id", "Name"))">
+                                asp-items="@(new SelectList(Model.Publishers,"Id", "FullName"))">
                             <option>Please select publisher</option>
                         </select>
                         <span asp-validation-for="PublisherId" class="text-danger"></span>

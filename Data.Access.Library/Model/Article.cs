@@ -18,8 +18,10 @@ namespace Data.Access.Library.Model
         [Column(TypeName = "varchar(Max)"), Required]
         public string Content { get; set; }
 
-        public Publisher Publisher { get; set; }
-        public Guid PublisherId { get; set; }
+        [ForeignKey("AppUserId")]
+        public AppUser AppUser { get; set; }
+        [Required]
+        public string AppUserId { get; set; }
 
         [Column(TypeName = "varchar(200)")]
         public string ImageUrl { get; set; }

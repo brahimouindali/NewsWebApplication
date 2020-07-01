@@ -19,7 +19,7 @@
                 <div class="row" style="margin: 0 auto; display: flex; justify-content: space-between">
                     <div class="col-sm name-time-category">
                         <i class="fa fa-user-edit">
-                        </i>@Html.DisplayFor(model => model.Article.Publisher.Name)
+                        </i>@Html.DisplayFor(model => model.Article.AppUser.FullName)
                     </div>
                     <div class="col-sm name-time-category" style="font-size: 12px">
                         <i class="fa fa-clock"></i>
@@ -128,17 +128,36 @@
         </div>
 
         <div class="aside px-2 col-lg-4 col-md-3">
-            @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))
+            <div id="block-menu">
+                @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))
+            </div>
         </div>
     </div>
 
-    <div>
+    <div id="articles-category">
         @{ var categories = categoryService.getCategories(); }
         @if (categories.Count() > 0)
         {
             @foreach (var item in categories)
-            {
+            
                 @(await Html.RenderComponentAsync<ArticlesparCategory>(RenderMode.ServerPrerendered, new { name = item.Name }))
             }
         }
     </div>
+
+
+    @section scripts{
+        <script>
+            $(document).scroll(function () {
+                checkOffset();
+            });
+
+            function checkOffset() {
+                if ($('#block-menu').offset().top + $('#block-menu').height()
+                    >= $('#articles-category').offset().top - 5)
+                    $('#block-menu').css('position', 'sticky');
+                if ($(document).scrollTop() + window.innerHeight < $('#articles-category').offset().top)
+                    $('#block-menu').css('position', 'fixed'); // restore when you scroll up
+            }
+        </script>
+    }

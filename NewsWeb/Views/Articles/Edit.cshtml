@@ -39,7 +39,7 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <select asp-for="PublisherId" class="form-control"
-                                asp-items="@(new SelectList(Model.Publishers,"Id", "Name"))">
+                                asp-items="@(new SelectList(Model.Publishers,"Id", "FullName"))">
                             <option value="@Model.PublisherId">Please select publisher</option>
                         </select>
                         <span asp-validation-for="PublisherId" class="text-danger"></span>

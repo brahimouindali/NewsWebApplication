@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Access.Library.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200616173755_initialDb")]
-    partial class initialDb
+    [Migration("20200629211550_initDb")]
+    partial class initDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,6 +24,10 @@ namespace Data.Access.Library.Migrations
             modelBuilder.Entity("Data.Access.Library.Model.Article", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("CategoryId")
@@ -42,9 +46,6 @@ namespace Data.Access.Library.Migrations
                     b.Property<DateTime>("PublishedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PublisherId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Titre")
                         .IsRequired()
                         .HasColumnType("varchar(200)")
@@ -52,9 +53,9 @@ namespace Data.Access.Library.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("PublisherId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Articles");
                 });
@@ -120,29 +121,6 @@ namespace Data.Access.Library.Migrations
                     b.HasIndex("ArticleId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("Data.Access.Library.Model.Publisher", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NewId()");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("varchar(30)")
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(30)")
-                        .HasMaxLength(30);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Data.Access.Library.Model.Rating", b =>
@@ -385,15 +363,15 @@ namespace Data.Access.Library.Migrations
 
             modelBuilder.Entity("Data.Access.Library.Model.Article", b =>
                 {
-                    b.HasOne("Data.Access.Library.Model.Category", "Category")
+                    b.HasOne("Data.Access.Library.Model.AppUser", "AppUser")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Access.Library.Model.Publisher", "Publisher")
+                    b.HasOne("Data.Access.Library.Model.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("PublisherId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

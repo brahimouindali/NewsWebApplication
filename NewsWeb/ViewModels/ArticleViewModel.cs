@@ -17,7 +17,7 @@ namespace NewsWebsite.ViewModels
         public string Content { get; set; }
 
         [Display(Name = "Publisher name")]
-        public Guid PublisherId { get; set; }
+        public string PublisherId { get; set; }
 
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
@@ -29,7 +29,7 @@ namespace NewsWebsite.ViewModels
         [Display(Name = "Category")]
         public Guid CategoryId { get; set; }
 
-        public IEnumerable<Publisher> Publishers { get; set; }
+        public IEnumerable<AppUser> Publishers { get; set; }
         public IEnumerable<Category> Categories { get; set; }
     }
 }

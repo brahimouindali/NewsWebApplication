@@ -17,7 +17,7 @@ namespace Data.Access.Library
         public DbSet<Article> Articles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Publisher> Publishers { get; set; }
+      //  public DbSet<Publisher> Publishers { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
 
@@ -28,7 +28,7 @@ namespace Data.Access.Library
             
             builder.Entity<Category>().Property(x => x.Id).HasDefaultValueSql("NewId()");
             builder.Entity<Comment>().Property(x => x.Id).HasDefaultValueSql("NewId()");
-            builder.Entity<Publisher>().Property(x => x.Id).HasDefaultValueSql("NewId()");
+        //    builder.Entity<Publisher>().Property(x => x.Id).HasDefaultValueSql("NewId()");
             builder.Entity<AppUser>().Property(x => x.Id).HasDefaultValueSql("NewId()");
             builder.Entity<Rating>().Property(x => x.Id).HasDefaultValueSql("NewId()");
         }

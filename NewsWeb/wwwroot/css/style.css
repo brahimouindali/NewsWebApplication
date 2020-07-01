@@ -1,19 +1,7 @@
 ﻿body {
     background: #f4f4f4;
-    /*  line-height: 1.5;
-    overflow-x: hidden;*/
 }
 
-/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. 
-
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
-}
-
-/* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
 }
@@ -24,7 +12,8 @@ a {
     border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
@@ -100,10 +89,6 @@ a.hover:hover {
     border-bottom: 1px solid #e84118;
 }
 
-/*.navbar {
-    height: 50px;
-}*/
-
 .card img:hover {
     opacity: .8;
     transform: scale(1.006);
@@ -111,7 +96,6 @@ a.hover:hover {
 }
 
 .imgs:hover {
-    /*opacity: .8;*/
     transform: scale(1.06);
     transition-duration: 200ms;
 }
@@ -125,7 +109,6 @@ a.hover:hover {
 }
 
 div.article-content {
-    /*font-family: 'Raleway', sans-serif;*/
     font-family: apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
     line-height: 2;
     font-size: 19px;
@@ -306,7 +289,6 @@ body {
 }
 
 .header {
-    /*max-width: 720px;*/
     max-width: 620px;
     margin: 2em auto 10em;
 }
@@ -408,30 +390,9 @@ body {
     border-bottom: 2px solid #0097bf;
 }
 
-    /*#header-1 .search-box {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        max-height: 0;
-        transform: translateY(100%);
-        background-color: #0097bf;
-        transition: all 0.3s;
-    }*/
-
-        /*#header-1 .search-box .search-input {
-            width: 100%;
-            height: 100%;
-            padding: 0 1em;
-            border: 0;
-            background-color: transparent;
-            opacity: 0;
-            color: #fff;
-        }*/
-
-            #header-1 .search-box .search-input::-webkit-input-placeholder {
-                color: rgba(255, 255, 255, 0.4);
-            }
+    #header-1 .search-box .search-input::-webkit-input-placeholder {
+        color: rgba(255, 255, 255, 0.4);
+    }
 
     #header-1.show .search-box {
         max-height: 40px;
@@ -471,18 +432,6 @@ body {
     color: #dc3545;
 }
 
-
-.aside {
-    /* position: absolute;
-    top: 61px;
-    right: 39px;
-    border: 2px solid #f33;
-    background-color: #fff;*/
-    /*position: absolute;
-    right: 10px;
-    top: 83px;*/
-}
-
 .text-black {
     color: #000;
 }
@@ -493,15 +442,8 @@ body {
     color: rgba(0,0,0,1);
 }
 
-/*section {
-    padding: 30px 0;
-    float: left;
-    width: 100%
-}*/
 
 .top-nav {
-    /*background: #fff;
-    padding: 0;*/
     border-bottom: 1px solid #dbdbdb
 }
 
@@ -651,18 +593,6 @@ span.position-absolute {
     background: linear-gradient(to right,#f42c8c,#ff5965);
     color: #fff;
 }
-/* 
-.cat {
-    background: -webkit-gradient(linear,left top,right top,from(#0265df),to(#3e8dda));
-    background: -webkit-linear-gradient(left,#0265df,#3e8dda);
-    background: -o-linear-gradient(left,#0265df,#3e8dda);
-    background: linear-gradient(to right,#0265df,#3e8dda);
-    color: #fff;
-} */
-
-/*.titre {
-    border: #f42c8c solid 1px;
-}*/
 
 .titre .arti-titre {
     font-size: 14px;
@@ -677,6 +607,225 @@ span.position-absolute {
     font-size: 14px;
     position: absolute;
     font-weight: 700;
-    /*margin-left: 17px;
-    margin-top: 5px;*/
+}
+
+.border-top-right-radius {
+    border-top-right-radius: 30%;
+}
+
+.border-top-left-radius {
+    border-top-left-radius: 30%;
+}
+
+
+/*Upload file CSS*/
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    background: #eee;
+    font-family: "Open Sans", Helvetica, sans-serif;
+}
+
+.setting {
+    background: #fff;
+    margin: 0 auto 3px;
+    padding: 12px;
+    /*width: 300px;*/
+}
+
+    .setting h2 {
+        color: #999;
+        font-size: 14px;
+        font-weight: 400;
+        margin: 0 0 6px;
+        line-height: 24px;
+    }
+
+    .setting a[data-action] {
+        cursor: pointer;
+        color: #555;
+        font-size: 14px;
+        line-height: 24px;
+        transition: color 0.2s;
+    }
+
+        .setting a[data-action] i {
+            width: 1.25em;
+            text-align: center;
+        }
+
+        .setting a[data-action]:hover {
+            color: #f80;
+        }
+
+        .setting a[data-action].disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+
+            .setting a[data-action].disabled:hover {
+                color: #555;
+            }
+
+.image_picker .settings_wrap {
+    overflow: hidden;
+    position: relative;
+}
+
+    .image_picker .settings_wrap .drop_target, .image_picker .settings_wrap .settings_actions {
+        float: left;
+    }
+
+    .image_picker .settings_wrap .drop_target {
+        margin-right: 18px;
+    }
+
+    .image_picker .settings_wrap .settings_actions {
+        margin-top: 12px;
+    }
+
+.settings_actions.vertical a {
+    display: block;
+}
+
+.drop_target {
+    position: relative;
+    cursor: pointer;
+    background: #e6e6e6;
+    border-top: 1px solid #cccccc;
+    border-radius: 4px;
+    width: 72px;
+    height: 72px;
+    padding: 4px 6px 6px;
+    transition: all 0.2s;
+}
+
+    .drop_target input[type="file"] {
+        visibility: hidden;
+    }
+
+    .drop_target:before {
+        content: '\f0ee';
+        font-family: FontAwesome;
+        position: absolute;
+        display: block;
+        width: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 32px;
+        color: rgba(0,0,0,0.3);
+        transition: color 0.2s;
+    }
+
+    .drop_target:hover, .drop_target.dropping {
+        background: #f80;
+        border-top-color: #cc6d00;
+    }
+
+        .drop_target:hover:before, .drop_target.dropping:before {
+            color: rgba(0,0,0,0.6);
+        }
+
+    .drop_target .image_preview {
+        width: 100%;
+        height: 100%;
+        background: no-repeat center;
+        background-size: contain;
+        position: relative;
+        z-index: 2;
+    }
+
+.image_details {
+    width: 192px;
+    padding: 4px;
+    background: #e6e6e6;
+    border-radius: 4px;
+    position: absolute;
+    top: 0;
+    left: 84px;
+    z-index: 5;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+
+.dropped ~ .image_details {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.image_details:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-right-color: #e6e6e6;
+    position: absolute;
+    left: -12px;
+    top: 10px;
+}
+
+.image_details .input_line {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+    .image_details .input_line:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .image_details .input_line span, .image_details .input_line input {
+        float: left;
+        line-height: 24px;
+    }
+
+    .image_details .input_line span {
+        font-size: 12px;
+        color: #666;
+        width: 20%;
+    }
+
+    .image_details .input_line input[type="text"] {
+        width: 100%;
+        color: #444444;
+        appearance: none;
+        border: 1px solid #e6e6e6;
+        border-radius: 3px;
+        background: #fff;
+        height: 24px;
+        line-height: 18px;
+        padding: 3px 5px;
+        font-size: 14px;
+        transition: border 0.2s;
+    }
+
+        .image_details .input_line input[type="text"]:hover, .image_details .input_line input[type="text"]:focus {
+            outline: 0;
+            border: 1px solid #f80;
+        }
+
+        .image_details .input_line input[type="text"]::-webkit-input-placeholder {
+            font-size: 14px;
+            color: #999;
+        }
+
+.image_details a.confirm {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    margin-top: -12px;
+    display: block;
+    width: 21px;
+    height: 21px;
+    border-radius: 100%;
+    background: #eee;
+    line-height: 23px;
+    text-align: center;
+    font-size: 16px;
 }

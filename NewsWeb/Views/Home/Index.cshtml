@@ -9,11 +9,6 @@
     <h6>Le resultat de <span class="text-red">"@ViewBag.query"</span></h6>
 }
 
-@* else if (ViewBag.query != null && ViewBag.isFound == false)
-    {
-
-    }*@
-
 <div class="row">
     @if (User.IsInRole(RoleName.AdminsRole) || User.IsInRole(RoleName.WritersRole))
     {
