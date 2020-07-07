@@ -48,7 +48,7 @@ namespace NewsWeb
             //services.AddAuthentication().AddFacebook(options =>
             //{
             //    options.AppId = "635098977109180";
-            //    options.AppSecret = "9d39973e4ec4b3f3de7d4e9d267d96d5";
+            //    options.AppSecret = "mssah9d39973e4ec4b3f3de7d4e9d267d96d5";
             //});
 
             services.AddSingleton<IEmailSender, EmailSender>();
