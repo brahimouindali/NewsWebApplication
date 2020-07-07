@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 
 namespace NewsWeb.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = RoleName.AdminsRole)]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -82,9 +82,7 @@ namespace NewsWeb.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            //var roleName = Request.Form["rdnameRole"].ToString();
             var roleName = Request.Form["rolesname"].ToString();
-            
 
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();

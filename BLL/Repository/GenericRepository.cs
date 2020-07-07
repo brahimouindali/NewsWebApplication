@@ -20,9 +20,7 @@ namespace BLL.Repository
         public void Delete(object id)
         {
             T objectToDelete = GetById(id);
-            table.Attach(objectToDelete);
             table.Remove(objectToDelete);
-            //_context.Entry(objectToDelete).State = EntityState.Deleted;
         }
 
         public  IEnumerable<T> GetAll()

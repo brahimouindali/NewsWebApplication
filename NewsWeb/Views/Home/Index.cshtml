@@ -10,15 +10,25 @@
 }
 
 <div class="row">
-    @if (User.IsInRole(RoleName.AdminsRole) || User.IsInRole(RoleName.WritersRole))
+    @if (User.IsInRole(RoleName.WritersRole))
     {
         <div class="col-lg-8 col-md-12">
-            <a asp-action="Create" asp-controller="Articles" class="btn btn-info btn-sm btn-block mb-2">
+            <a asp-action="create" asp-controller="articles" class="btn btn-info btn-sm btn-block mb-2">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i> New
             </a>
         </div>
     }
+    @if (User.IsInRole(RoleName.AdminsRole))
+    {
+        <div class="col-lg-8 col-md-12">
+            <a href="identity/account/Register" class="btn btn-info btn-sm btn-block mb-2">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i> New user
+            </a>
+        </div>
+    }
+</div>
 
+<div class="row">
     @(await Html.RenderComponentAsync<ArticlesSlide>(RenderMode.Static, new { Articles = Model }))
     <div class="aside px-2 col-lg-4 col-md-3">
         @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))

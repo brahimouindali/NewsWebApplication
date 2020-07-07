@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "Manage users";
+}
+
+@if (User.IsInRole(RoleName.AdminsRole))
+{
+    <table id="users" class="table table-bordered">
+        <thead>
+            <tr>
+                <td> First Name </td>
+                <td> Last Name </td>
+                <td> Email </td>
+                <td>Lock / Unlock</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+        <tbody>
+            @(await Html.RenderComponentAsync<LockOrUnlockUser>(RenderMode.ServerPrerendered))
+        </tbody>
+    </table>
+}
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+            $('input[type="search"]').addClass('form-control');
+            $('input[type="search"]').css({
+                'display': 'inline-block',
+                'width': '76%'
+            });
+        });
+    </script>
+}

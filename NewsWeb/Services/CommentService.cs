@@ -2,6 +2,7 @@
 using Data.Access.Library.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NewsWeb.Services
@@ -20,10 +21,14 @@ namespace NewsWeb.Services
             _comment.Save();
         }
 
-        public IEnumerable<Comment> getAll()
-        {
-            return _comment.Entity.GetAll();
-        }
+        public Comment getComment(Guid id) =>
+            _comment.Entity.GetById(id);
+
+        public IEnumerable<Comment> getAll() =>
+             _comment.Entity.GetAll().Where(c => c.IsVisible);
+
+        public IEnumerable<Comment> getNewComments() =>
+            getAll().OrderByDescending(c => c.CommentAt);
 
         public void Update(Comment comment)
         {

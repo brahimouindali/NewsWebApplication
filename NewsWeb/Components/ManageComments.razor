@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject CommentService commentService
+
+
+@foreach (var comment in comments)
+{
+    <tr>
+        <td>@comment.Title</td>
+        <td>@comment.CommentsDetail</td>
+        <td>@comment.CommentAt </td>
+        <td>
+            @if (@comment.IsVisible)
+            {
+                <span @onclick="(()=>Toggle(comment.Id))">
+                    <i class="fas fa-eye"></i>
+                </span>
+            }
+            else
+            {
+                <span @onclick="(()=>Toggle(comment.Id))">
+                    <i class="fas fa-eye-slash"></i>
+                </span>
+            }
+        </td>
+    </tr>
+}
+
+@code {
+    List<Comment> comments = new List<Comment>();
+
+    protected override Task OnInitializedAsync()
+    {
+        comments = commentService.getNewComments().ToList();
+        return base.OnInitializedAsync();
+    }
+
+    void Toggle(Guid id)
+    {
+        var comment = commentService.getComment(id);
+        comment.IsVisible = !comment.IsVisible;
+        commentService.Update(comment);
+    }
+}

@@ -17,8 +17,30 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <div class="setting image_picker">
+                    <h2>Image</h2>
+                    <div class="settings_wrap">
+                        <label class="drop_target">
+                            <div class="image_preview"></div>
+                            <input type="file" id="inputFile" asp-for="File" />
+                        </label>
+                        <div class="settings_actions vertical">
+                            <a data-action="choose_from_uploaded">
+                                <i class="fa fa-picture-o"></i>
+                                Choose from Uploads
+                            </a><a class="disabled" data-action="remove_current_image">
+                                <i class="fa fa-ban"></i>
+                                Remove Current Image
+                            </a>
+                        </div>
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div class="form-group">
                         <select asp-for="CategoryId" class="form-control"
                                 asp-items="@(new SelectList(Model.Categories,"Id", "Name"))">
@@ -27,16 +49,8 @@
                         <span asp-validation-for="CategoryId" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="btn btn-block btn-primary" style="height: 38px">
-                            <input asp-for="File" type="file" style="display:none;" />
-                            <i class="fa fa-upload" aria-hidden="true"></i>
-                        </label>
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-5">
+
+                <div class="col-md-6">
                     <div class="form-group">
                         <select asp-for="PublisherId" class="form-control"
                                 asp-items="@(new SelectList(Model.Publishers,"Id", "FullName"))">
@@ -50,7 +64,7 @@
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="ImageUrl" />
                 @*<input type="hidden" asp-for="CategoryId" />
-                <input type="hidden" asp-for="PublisherId" />*@
+            <input type="hidden" asp-for="PublisherId" />*@
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>

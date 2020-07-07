@@ -16,6 +16,8 @@
     <link href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=635098977109180&autoLogAppEvents=1" nonce="YAxs4qhN"></script>
     <header class="top-nav mb-2">
         <nav class="navbar navbar-expand-sm navbar-light bg-white navbar-toggleable-sm position-fixed" style="width: 100%; z-index: 1000">
             <div class="container">
@@ -30,14 +32,50 @@
                     <span class="position-absolute">
                         <partial name="_LoginPartial" />
                     </span>
-                    @(await Html.RenderComponentAsync<Navigation>( RenderMode.ServerPrerendered))
+                    <ul class="navbar-nav flex-grow-1">
+                        @(await Html.RenderComponentAsync<Navigation>( RenderMode.ServerPrerendered))
+                        @if (User.IsInRole(RoleName.AdminsRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="users" asp-controller="management">
+                                    Users
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(RoleName.EditorRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="users" asp-controller="management">
+                                    Articles
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="users" asp-controller="management">
+                                    Comments
+                                </a>
+                            </li>
+                        }
 
-                    <form class="ml-auto mr-9" asp-action="Search" asp-controller="Home">
-                        <div class="search">
-                            <input type="text" name="query" class="form-control" maxlength="64" placeholder="Search" />
-                            <button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+                        @*<form class="ml-auto mr-9" asp-action="Search" asp-controller="Home">
+                                <div class="search">
+                                    <input type="text" name="query" class="form-control" maxlength="64" placeholder="Search" />
+                                    <button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+                                </div>
+                            </form>*@
+
+                        <li class="nav-item position-relative" onclick="searchModel()">
+                            <span class="btn position-absolute" style="background: #007bff;color: #fff;width: 40px;left: 10px;top: 5px">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="bg-light hidden" id="search-model" style="">
+                        <div id="search-model">
+                            <form class="ml-auto mr-9" asp-action="Search" asp-controller="Home">
+                                <input class="mt-3 ml-2" type="text" name="query" maxlength="64" placeholder="Search" />
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -55,17 +93,22 @@
         </main>
     </div>
 
-    @*<footer class="border-top footer text-muted" style="height: 600px">
-            <div class="container">
-                &copy; 2020 - navigation - <a asp-area="" asp-controller="home" asp-action="privacy">privacy</a>
-            </div>
-        </footer>*@
-
     <script src="_framework/blazor.server.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function searchModel() {
+            $('#search-model').css({
+                'position': 'absolute',
+                'width': '230px',
+                'height': '70px',
+                'right': '408px',
+                'top': '55px'
+            });
+            $('#search-model').toggle();
+        }
+    </script>
     @RenderSection("Scripts", required: false)
-
 </body>
 </html>

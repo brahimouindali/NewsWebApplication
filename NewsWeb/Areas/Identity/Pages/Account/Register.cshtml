@@ -5,124 +5,91 @@
     ViewData["Title"] = "Register";
 }
 
-<form asp-route-returnUrl="@Model.ReturnUrl" method="post" autocomplete="off" class="mb-2">
-    <div class="py-4 my-4">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="row form-group">
-            <div class="col-8 offset-2">
-                <div class="card">
-                    <div class="card-body px-lg-5 pt-4">
-                        <h3 class="col-12 text-success text-center py-4">
-                            <strong>Sign Up</strong>
-                        </h3>
-                        <hr class="bg-danger" />
-                        <div class="form-row py-2">
-                            <div class="col">
-                                <div>
-                                    <input type="text" asp-for="Input.FirstName" placeholder="Enter your first name here" class="form-control" />
-                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+@if (User.IsInRole(RoleName.AdminsRole))
+{
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" autocomplete="off" class="mb-2">
+        <div class="py-4 my-4">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row form-group">
+                <div class="col-8 offset-2">
+                    <div class="card">
+                        <div class="card-body px-lg-5 pt-4">
+                            <h3 class="col-12 text-success text-center py-4">
+                                <strong>Sign Up</strong>
+                            </h3>
+                            <hr class="bg-danger" />
+                            <div class="form-row py-2">
+                                <div class="col">
+                                    <div>
+                                        <input type="text" asp-for="Input.FirstName" placeholder="Enter your first name here" class="form-control" />
+                                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div>
-                                    <input type="text" asp-for="Input.LastName" placeholder="Enter your last name here" class="form-control" />
-                                    <span asp-validation-for="Input.LastName" class="text-dangee"></span>
+                                <div class="col">
+                                    <div>
+                                        <input type="text" asp-for="Input.LastName" placeholder="Enter your last name here" class="form-control" />
+                                        <span asp-validation-for="Input.LastName" class="text-dangee"></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="py-2">
-                            <input type="email" asp-for="Input.Email" placeholder="Enter your email here" class="form-control" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-                        <div class="py-2">
-                            <input type="text" asp-for="Input.PhoneNumber" placeholder="Enter your phone number here" class="form-control" />
-                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                        </div>
-                        @*<div class="py-2">
-                                <input type="password" asp-for="Input.Password" placeholder="Enter your password here" class="form-control" />
-                                <span asp-validation-for="Input.Password" class="text-danger"></span>
                             </div>
                             <div class="py-2">
-                                <input type="password" asp-for="Input.ConfirmPassword" placeholder="Confirm password" class="form-control" />
+                                <input type="email" asp-for="Input.Email" placeholder="Enter your email here" class="form-control" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="py-2">
+                                <input type="text" asp-for="Input.PhoneNumber" placeholder="Enter your phone number here" class="form-control" />
+                                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" asp-for="Input.Password" id="txtPw" placeholder="Enter your password here" />                            <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1" onclick="togglePw()">
+                                            <i class="fas fa-eye" id="eyePw"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="password" class="form-control" asp-for="Input.ConfirmPassword" id="txtCPw" placeholder="Confirm password" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon2" onclick="toggleCPw()">
+                                            <i class="fas fa-eye" id="eyeCPw"></i>
+                                        </span>
+                                    </div>
+                                </div>
                                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                            </div>*@
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <input type="password" class="form-control" asp-for="Input.Password" id="txtPw" placeholder="Enter your password here" />                            <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon1" onclick="togglePw()">
-                                        <i class="fas fa-eye" id="eyePw"></i>
-                                    </span>
-                                </div>
                             </div>
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
 
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <input type="password" class="form-control" asp-for="Input.ConfirmPassword" id="txtCPw" placeholder="Confirm password" />
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon2" onclick="toggleCPw()">
-                                        <i class="fas fa-eye" id="eyeCPw"></i>
-                                    </span>
-                                </div>
+                            <div class="py-2">
+                                <select class="form-control" name="rolesname">
+                                    <option value="@RoleName.EditorRole">@RoleName.EditorRole</option>
+                                    <option value="@RoleName.AdminsRole">@RoleName.AdminsRole</option>
+                                    <option value="@RoleName.WritersRole">@RoleName.WritersRole</option>
+                                </select>
                             </div>
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            <div class="py-2">
+                                <button type="submit" class="btn btn-success form-control">Register</button>
+                            </div>
+                            <hr />
+                            <p>By clicking <em>Register</em> you agree to our <a href="#">terms of service</a></p>
                         </div>
-
-                        <div class="py-2">
-                            <select class="form-control" name="rolesname">
-                                <option value="@RoleName.EditorRole">@RoleName.EditorRole</option>
-                                <option value="@RoleName.AdminsRole">@RoleName.AdminsRole</option>
-                                <option value="@RoleName.WritersRole">@RoleName.WritersRole</option>
-                            </select>
-                        </div>
-                        <div class="py-2">
-                            <button type="submit" class="btn btn-success form-control">Register</button>
-                        </div>
-                        <hr />
-                        <p>By clicking <em>Register</em> you agree to our <a href="#">terms of service</a></p>
                     </div>
                 </div>
             </div>
         </div>
+    </form>
+}
+else
+{
+    <div class="text-danger">Access denied only admins can access this page</div>
+    <div class="alert-info">
+        <a asp-action="index" asp-controller="home">Go to the main page</a>
     </div>
-</form>
-
-@*<div class="row mt-5">
-        <div class="col-md-4">
-
-        </div>
-        <div class="col-md-6 col-md-offset-2">
-            <section>
-                <h4>Use another service to register.</h4>
-                <hr />
-                @{
-                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                    {
-                        <div>
-                            <p>
-                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                                for details on setting up this ASP.NET application to support logging in via external services.
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div>
-                                <p>
-                                    @foreach (var provider in Model.ExternalLogins)
-                                    {
-                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                    }
-                                </p>
-                            </div>
-                        </form>
-                    }
-                }
-            </section>
-        </div>
-    </div>*@
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

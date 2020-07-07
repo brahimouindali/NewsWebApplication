@@ -35,10 +35,10 @@ namespace Data.Access.Library.Model
         [ForeignKey("ArticleId")]
         public virtual Article Article { get; set; }
 
-
         public int Like { get; set; }
 
         public int Deslike { get; set; }
 
+        public bool IsVisible { get; set; }
     }
 }

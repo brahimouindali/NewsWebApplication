@@ -34,5 +34,7 @@ namespace Data.Access.Library.Model
         public virtual IEnumerable<Rating> Ratings { get; set; }
 
         public int NombreVisites { get; set; }
+
+        public bool IsVisible { get; set; }
     }
 }

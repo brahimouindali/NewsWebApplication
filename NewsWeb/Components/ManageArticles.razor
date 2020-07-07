@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject ArticleService articleService
+
+@foreach (var article in articles)
+{
+    <tr>
+        <td>@article.Titre</td>
+        <td>
+            @article.Content.Substring(0, 80)
+            <a href="articles/details/@article.Id">Read More</a>
+        </td>
+        <td>@article.PublishedAt</td>
+        <td>
+            @if (@article.IsVisible)
+            {
+                <span @onclick="(()=>Toggle(article.Id))">
+                    <i class="fas fa-eye"></i>
+                </span>
+            }
+            else
+            {
+                <span @onclick="(()=>Toggle(article.Id))">
+                    <i class="fas fa-eye-slash"></i>
+                </span>
+            }
+        </td>
+    </tr>
+}
+
+
+@code {
+    List<Article> articles = new List<Article>();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        articles = articleService.GetNewArticles().ToList();
+    }
+
+    void Toggle(string id)
+    {
+        var article = articleService.GetArticle(id);
+        article.IsVisible = !article.IsVisible;
+        articleService.Update(article);
+    }
+}

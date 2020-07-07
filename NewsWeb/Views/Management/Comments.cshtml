@@ -1,0 +1,29 @@
+﻿
+<table id="comments" class="table table-bordered">
+    <thead>
+        <tr>
+            <td>titre</td>
+            <td>Commentaier</td>
+            <td>commente a </td>
+            <td>is visible</td>
+        </tr>
+    </thead>
+    <tbody>
+        @(await Html.RenderComponentAsync<ManageComments>( RenderMode.ServerPrerendered))
+    </tbody>
+</table>
+
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#comments').DataTable();
+            $('input[type="search"]').addClass('form-control');
+            $('input[type="search"]').css({
+                'display': 'inline-block',
+                'width': '76%'
+            });
+        });
+    </script>
+}

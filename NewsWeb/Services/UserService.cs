@@ -30,7 +30,7 @@ namespace NewsWeb.Services
 
         public void LockUnlockUser(string id)
         {
-            var user = _user.Entity.GetById(id);
+            var user = GetUser(id);
             if (user.LockoutEnd != null && user.LockoutEnd > DateTime.Now)
             {
                 user.LockoutEnd = DateTime.Now;

@@ -26,31 +26,15 @@ namespace NewsWeb.Controllers
             _article = article;
             _category = category;
             _user = user;
-            ViewBag.Categories = getCategories();
         }
 
-        private List<string> getCategories()
-        {
-            var categories = _category.Entity.GetAll();
-            List<string> categoriesList = new List<string>();
-            foreach (var category in categories)
-            {
-                categoriesList.Add(category.Name);
-            }
-            return categoriesList;
-        }
+        private IEnumerable<Article> ArticlesVisible() =>
+            _article.Entity.GetAll().Where(a => a.IsVisible);
+
         public IActionResult Index()
         {
-            var articles = _article.Entity.GetAll().OrderByDescending(d => d.PublishedAt).Take(9);
+            var articles = ArticlesVisible().OrderByDescending(d => d.PublishedAt).Take(9);
             return View(articles);
-        }
-
-        [Route("/users")]
-        [Authorize(Roles = RoleName.AdminsRole)]
-        public IActionResult Users()
-        {
-            var users = _user.Entity.GetAll();
-            return View(users);
         }
 
         public IActionResult Search(string query)
@@ -60,8 +44,8 @@ namespace NewsWeb.Controllers
                 ViewBag.query = query;
                 query = query.ToLower();
 
-                var articles = _article.Entity.GetAll()
-                    .Where(a => a.Content.ToLower().Contains(query) || a.Titre.ToLower().Contains(query));
+                var articles = ArticlesVisible()
+                    .Where(a =>  a.Titre.ToLower().Contains(query));
 
                 if (articles.Count() == 0)
                 {
@@ -74,62 +58,59 @@ namespace NewsWeb.Controllers
                     return View("Index", articles);
                 }
             }
-            else if (String.IsNullOrEmpty(query) || String.IsNullOrWhiteSpace(query))
+            else
             {
-                ViewBag.query = query;
-                return RedirectToAction("Index");
+                return View("index");
             }
-            return View("Index");
-
         }
 
         [Route(SD.Politique)]
         public IActionResult Politique()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Politique).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Economie)]
         public IActionResult Economie()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Economie).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Monde)]
         public IActionResult Monde()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Monde).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Societe)]
         public IActionResult Societe()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Societe).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Sport)]
         public IActionResult Sport()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Sport).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Culture)]
         public IActionResult Culture()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Culture).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         [Route(SD.Tech)]
         public IActionResult Tech()
         {
             var category = _category.Entity.GetAll().Where(c => c.Name == SD.Tech).FirstOrDefault();
-            return View("Index", _article.Entity.GetAll().Where(a => a.CategoryId == category.Id));
+            return View("Index", ArticlesVisible().Where(a => a.CategoryId == category.Id));
         }
 
         public IActionResult Privacy()

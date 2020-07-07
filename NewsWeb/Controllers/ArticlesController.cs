@@ -1,6 +1,7 @@
 ﻿using BLL;
 using Data.Access.Library.Interfaces;
 using Data.Access.Library.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -96,7 +97,8 @@ namespace NewsWeb.Controllers
                     CategoryId = model.CategoryId,
                     AppUserId = model.PublisherId,
                     ImageUrl = model.File.FileName,
-                    PublishedAt = DateTime.Now
+                    PublishedAt = DateTime.Now,
+                    IsVisible = false
                 };
 
                 _article.Entity.Insert(article);
@@ -179,7 +181,6 @@ namespace NewsWeb.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, ArticleViewModel model)
@@ -256,8 +257,7 @@ namespace NewsWeb.Controllers
 
             return View(articleViewModel);
         }
-
-
+                
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)

@@ -7,16 +7,17 @@
     var text = Model.Article.Content;
     var para = text.Split(".");
 }
+
 <div class="row">
     <div class="col-lg-8 col-md-12 bg-white" style="padding: 20px 15px">
         <div class="shadow-sm">
             <div style="padding: 0 15px">
-                <div>
-                    <p class="titre-article">
-                        @Html.DisplayFor(model => model.Article.Titre)
-                    </p>
-                </div>
-                <div class="row" style="margin: 0 auto; display: flex; justify-content: space-between">
+
+                <p class="titre-article">
+                    @Html.DisplayFor(model => model.Article.Titre)
+                </p>
+
+                <div class="row" style="margin: 10px auto; display: flex; justify-content: space-between">
                     <div class="col-sm name-time-category">
                         <i class="fa fa-user-edit">
                         </i>@Html.DisplayFor(model => model.Article.AppUser.FullName)
@@ -38,7 +39,7 @@
                         @(await Html.RenderComponentAsync<Ratings>(RenderMode.ServerPrerendered, new { Id = Model.Article.Id }))
                     </div>
                 </div>
-                <partial name="~/Views/_SocialMedia.cshtml" />
+                @*<partial name="~/Views/_SocialMedia.cshtml" />*@
 
                 <div>
                     <img src="~/img/@Model.Article.ImageUrl" alt="@Model.Article.ImageUrl" style="width: 100%; margin: 0 auto" />
@@ -75,9 +76,9 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    if (User.IsInRole(RoleName.AdminsRole) || User.IsInRole(RoleName.WritersRole))
+                    if (User.IsInRole(RoleName.AdminsRole))
                     {
-                        <hr />
+                        <hr class="bg-info" />
                         <div class="row">
                             <div class="col-6">
                                 <span class="btn btn-info btn-sm btn-block">
@@ -115,13 +116,23 @@
                         </div>
                     }
                 }
-                <hr />
-                <partial name="~/Views/_SocialMedia.cshtml" />
-
-                @*<a href="http://graph.facebook.com/?ids=https://localhost:44315/articles/details/Facebook-s-offre-la-plateforme-Giphy-pour-400-millions-de-dollars">Share on facebook</a>
-                    <a href="http://urls.api.twitter.com/1/urls/count.json?url=https://localhost:44315/articles/details/Facebook-s-offre-la-plateforme-Giphy-pour-400-millions-de-dollars">Share on twitter</a>*@
-
             </div>
+            @if (!User.IsInRole(RoleName.AdminsRole) && !User.IsInRole(RoleName.EditorRole) && !User.IsInRole(RoleName.WritersRole))
+            {
+                <div class="row">
+                    <div class="col offset-5">
+                        @{ string id = Model.Article.Id; }
+                        <div class="fb-share-button" data-href="https://localhost:44315/articles/details/@id"
+                             data-layout="button_count" data-size="small">
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2Farticles%2Fdetails%2F@id&amp;src=sdkpreparse"
+                               class="fb-xfbml-parse-ignore">Share</a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a class="twitter-share-button" target="_blank" href="https://twitter.com/share?url=https://localhost:44315/articles/details/@id">Tweet</a>
+                    </div>
+                </div>
+            }
             <div class="container">
                 @(await Html.RenderComponentAsync<CommentForm>(RenderMode.ServerPrerendered, new { Id = Model.Article.Id }))
             </div>
@@ -139,9 +150,9 @@
         @if (categories.Count() > 0)
         {
             @foreach (var item in categories)
-            
+
                 @(await Html.RenderComponentAsync<ArticlesparCategory>(RenderMode.ServerPrerendered, new { name = item.Name }))
-            }
+        }
         }
     </div>
 
@@ -155,7 +166,10 @@
             function checkOffset() {
                 if ($('#block-menu').offset().top + $('#block-menu').height()
                     >= $('#articles-category').offset().top - 5)
-                    $('#block-menu').css('position', 'sticky');
+                    $('#block-menu').css({
+                        'position': 'static',
+                        'z-index': '10'
+                    });
                 if ($(document).scrollTop() + window.innerHeight < $('#articles-category').offset().top)
                     $('#block-menu').css('position', 'fixed'); // restore when you scroll up
             }

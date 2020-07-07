@@ -1,9 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Authorization
+@using BLL
 @using Data.Access.Library.Model
 @using NewsWeb.Services
 @inject CategoryService categoryService
 
-<ul class="navbar-nav flex-grow-1">
+
     @foreach (var category in categories)
     {
         <li class="nav-item">
@@ -12,7 +14,7 @@
             </NavLink>
         </li>
     }
-</ul>
+
 
 @code {
     List<Category> categories = new List<Category>();
