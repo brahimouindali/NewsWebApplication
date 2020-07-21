@@ -17,12 +17,14 @@
     <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#articles').DataTable();
+             $('#articles').DataTable();
             $('input[type="search"]').addClass('form-control');
             $('input[type="search"]').css({
                 'display': 'inline-block',
                 'width': '76%'
             });
+            //$('tr[role="row"]').$('.odd').hide();
+            //$('tr[role="row"]').$('.even').hide();
         });
     </script>
 }

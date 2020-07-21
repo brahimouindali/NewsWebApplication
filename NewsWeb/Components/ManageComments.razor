@@ -10,7 +10,7 @@
         <td>@comment.Title</td>
         <td>@comment.CommentsDetail</td>
         <td>@comment.CommentAt </td>
-        <td>
+        <td class="hiden">
             @if (@comment.IsVisible)
             {
                 <span @onclick="(()=>Toggle(comment.Id))">
@@ -33,7 +33,7 @@
     protected override Task OnInitializedAsync()
     {
         comments = commentService.getNewComments().ToList();
-        return base.OnInitializedAsync();
+        return base.OnInitializedAsync();        
     }
 
     void Toggle(Guid id)

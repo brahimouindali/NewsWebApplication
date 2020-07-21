@@ -25,6 +25,9 @@ namespace NewsWeb.Services
             _comment.Entity.GetById(id);
 
         public IEnumerable<Comment> getAll() =>
+             _comment.Entity.GetAll();
+
+        public IEnumerable<Comment> getVisibleComments() =>
              _comment.Entity.GetAll().Where(c => c.IsVisible);
 
         public IEnumerable<Comment> getNewComments() =>

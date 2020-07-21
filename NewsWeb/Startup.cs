@@ -2,6 +2,7 @@ using BLL;
 using BLL.UnitOfWork;
 using Data.Access.Library;
 using Data.Access.Library.Interfaces;
+using Data.Access.Library.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -58,6 +59,7 @@ namespace NewsWeb
             services.AddScoped<ArticleService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<UserService>();
+            services.AddScoped<ContactService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

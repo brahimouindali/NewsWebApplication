@@ -44,21 +44,22 @@ namespace NewsWeb.Controllers
             _userManager = UserManager;
         }
 
+        [Authorize(Roles = RoleName.WritersRole)]
         public async Task<IActionResult> Create()
         {
             var categories = _category.Entity.GetAll();
 
-            var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
-            var users = new List<AppUser>();
-            foreach (var user in usersInWriterRole)
-            {
-                users.Add(user as AppUser);
-            }
-            var publishers = users;
+            //var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
+            //var users = new List<AppUser>();
+            //foreach (var user in usersInWriterRole)
+            //{
+            //    users.Add(user as AppUser);
+            //}
+            //var publishers = users;
 
             ArticleViewModel model = new ArticleViewModel
             {
-                Publishers = publishers,
+                //Publishers = publishers,
                 Categories = categories
             };
 
@@ -89,13 +90,16 @@ namespace NewsWeb.Controllers
                 string id = Regex.Replace(titre, " ", "-");
 
 
+                string userId = CurrentUser();
+
                 Article article = new Article
                 {
                     Id = id,
                     Titre = model.Titre,
                     Content = model.Content,
                     CategoryId = model.CategoryId,
-                    AppUserId = model.PublisherId,
+                    //AppUserId = model.PublisherId,
+                    AppUserId = userId,
                     ImageUrl = model.File.FileName,
                     PublishedAt = DateTime.Now,
                     IsVisible = false
@@ -106,6 +110,14 @@ namespace NewsWeb.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
             return View(model);
+        }
+
+        private string CurrentUser()
+        {
+            //Retreving userId
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            return claim.Value;
         }
 
         public IActionResult Details(string Id)
@@ -120,16 +132,13 @@ namespace NewsWeb.Controllers
                     var publishers = _user.Entity.GetAll();
                     var publisher = publishers.Where(p => p.Id == article.AppUserId).FirstOrDefault();
 
-                    //Retreving userId
-                    //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-                    //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                    //ViewBag.userId = claim.Value;
 
                     var articleViewModel = new ArticleCommentsViewModel
                     {
+                        Publisher = publisher,
                         Article = article,
-                        Category = category,
-                        Publisher = publisher
+                        Category = category
+                        
                     };
 
                     article.NombreVisites++;
@@ -145,6 +154,7 @@ namespace NewsWeb.Controllers
             }
         }
 
+        [Authorize(Roles = RoleName.WritersRole)]
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -154,14 +164,14 @@ namespace NewsWeb.Controllers
             var article = _article.Entity.GetById(id);            
             var categories = _category.Entity.GetAll();
 
-            var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
-            var users = new List<AppUser>();
-            foreach (var user in usersInWriterRole)
-            {
-                users.Add(user as AppUser);
-            }
-            var publishers = users;
-
+            //var usersInWriterRole = _userManager.GetUsersInRoleAsync(RoleName.WritersRole).Result;
+            //var users = new List<AppUser>();
+            //foreach (var user in usersInWriterRole)
+            //{
+            //    users.Add(user as AppUser);
+            //}
+            //var publishers = users;
+            var userId = CurrentUser();
             if (article == null)
             {
                 return NotFound();
@@ -172,11 +182,11 @@ namespace NewsWeb.Controllers
                 Titre = article.Titre,
                 Content = article.Content,
                 ImageUrl = article.ImageUrl,
-                Publishers = publishers,
+                //Publishers = publishers,
                 Categories = categories,
                 PublishedAt = article.PublishedAt,
                 CategoryId = article.CategoryId,
-                PublisherId = article.AppUserId
+                PublisherId = userId
             };
             return View(model);
         }
@@ -204,11 +214,11 @@ namespace NewsWeb.Controllers
 
                     string myStr = model.Titre;
                     string titre = Regex.Replace(myStr, "[^a-zA-Z0-9_]+", "-");
-                    string ida = Regex.Replace(titre, " ", "-");
+                    string idReplaced = Regex.Replace(titre, " ", "-");
 
                     Article article = new Article
                     {
-                        Id = ida,
+                        Id = idReplaced,
                         Titre = model.Titre,
                         Content = model.Content,
                         AppUserId = model.PublisherId,
@@ -257,7 +267,8 @@ namespace NewsWeb.Controllers
 
             return View(articleViewModel);
         }
-                
+
+        [Authorize(Roles = RoleName.EditorRole)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)

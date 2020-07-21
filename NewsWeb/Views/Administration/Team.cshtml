@@ -1,0 +1,41 @@
+﻿@model IEnumerable<AppUser>
+
+@{
+    var admins = ViewBag.admins;
+    var editeurs = ViewBag.editeurs;
+    var journalistes = ViewBag.journalistes;
+    var names = "";
+}
+
+    <style>
+        #equipe {
+            font-family: 'Encode Sans Condensed',sans-serif;
+        }
+
+    </style>
+
+    <div id="equipe">
+        <h2>ÉQUIPE DE TRAVAIL</h2>
+        Administration:
+        @foreach (var admin in admins)
+        {
+            names += $"{admin.FullName} ";
+        }
+        <h3>@names</h3>
+
+        @{names = ""; }
+        Editeurs :
+        @foreach (var editeur in editeurs)
+        {
+            names += $"{editeur.FullName} ";
+        }
+        <h3>@names</h3>
+
+        @{names = ""; }
+        Journalistes :
+        @foreach (var journaliste in journalistes)
+        {
+            names = $"{journaliste.FullName} ";
+        }
+        <h3>@names</h3>
+    </div>

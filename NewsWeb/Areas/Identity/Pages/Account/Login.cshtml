@@ -5,77 +5,215 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1 class="text-center text-capitalize">@ViewData["Title"]</h1>
+<style>
+    body {
+        background: url(~/img/bgForms/login.jpg) no-repeat 0px 0px;
+        min-height: 100vh;
+        overflow: hidden;
+        background-size: cover;
+        font-family: 'Raleway', sans-serif;
+    }
 
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <section>
-            <form id="account" method="post">
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <input asp-for="Input.Email" class="form-control" placeholder="email@exemple.com" />
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                        </div>
-                    </div>
+    p.w3l-register-p {
+        color: #eee;
+        font-size: 13px;
+        text-align: center;
+        margin-top: 2em;
+    }
 
-                    <div class="mb-3">
-                        <div class="input-group">
-                            <input type="password" class="form-control" asp-for="Input.Password" id="txtPw" placeholder="Enter your password here" />                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1" onclick="togglePw()">
-                                    <i class="fas fa-eye" id="eyePw"></i>
-                                </span>
+    .w3l-login-form {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 3em;
+        border-radius: 10px;
+        box-sizing: border-box;
+    }
+
+    .group {
+        display: flex;
+        padding: 15px 5px;
+        background-color: #ffffff;
+    }
+
+        .group i {
+            color: #fc3955;
+            font-size: 20px;
+            padding: 0 10px;
+        }
+
+    .w3l-form-group {
+        margin: 20px 0;
+    }
+
+        .w3l-form-group label {
+            display: block;
+            text-transform: uppercase;
+            font-size: 13px;
+            color: #d2d2d2;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        border: none;
+        box-sizing: border-box;
+        background: transparent;
+        color: #000;
+    }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+        }
+
+    button.btn-login {
+        background: #fc3955;
+        color: #ffffff;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        padding: 12px 60px;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 6px;
+    }
+
+        button.btn-login:hover {
+            background-color: #00BCD4;
+            transition-duration: 5s;
+        }
+
+    .forgot {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+    }
+
+        .forgot p {
+            color: #ffffff;
+            text-align: center;
+            margin: 0px;
+            font-size: 13px;
+        }
+
+    .register-user {
+        color: #00BCD4;
+        text-decoration: none;
+    }
+</style>
+
+<div class="w3l-login-form" style="background: rgba(0, 0, 0, 0.4117647058823529);">
+    <h2>Login Here</h2>
+    <form id="account" method="POST">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="w3l-form-group">
+            <label asp-for="Input.Email"> :</label>
+            <div class="group">
+                <i class="fas fa-user"></i>
+                <input type="text" asp-for="Input.Email" class="form-control" placeholder="email.exemple.com" />
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div class=" w3l-form-group">
+            <label asp-for="Input.Password"></label>
+            <div class="group">
+                    @*<i class="fas fa-eye" id="eyePw"></i>*@
+                    <i class="fas fa-lock" id="eyePw" onclick="togglePw()"></i>                
+                <input type="password" asp-for="Input.Password" id="txtPw" class="form-control" placeholder="Password" />
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+        <div class="forgot">
+            <a id="forgot-password" asp-page="./ForgotPassword">Forgot Password?</a>
+            <p><input type="checkbox" asp-for="Input.RememberMe">Remember Me</p>
+        </div>
+        <button class="btn-login" type="submit">Login</button>
+    </form>
+    <p class=" w3l-register-p">
+        Don't have an account?
+        <a asp-page="Identity/Account/Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-user"> Register</a>
+    </p>
+</div>
+
+
+@*<h1 class="text-center text-capitalize">@ViewData["Title"]</h1>*@
+
+@*<div class="row">
+        <div class="col-md-6 offset-md-3">
+            <section>
+                <form id="account" method="post">
+                    <h4>Use a local account to log in.</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input asp-for="Input.Email" class="form-control" placeholder="email@exemple.com" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
                             </div>
                         </div>
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="password" class="form-control" asp-for="Input.Password" id="txtPw" placeholder="Enter your password here" />                            <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1" onclick="togglePw()">
+                                        <i class="fas fa-eye" id="eyePw"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Log in</button>
                     </div>
 
 
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
+                    <div class="form-group">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                        <p>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        </p>
                     </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
-                </div>
-                <div class="form-group">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
+                </form>
+            </section>
+        </div>
 
-</div>
+    </div>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
+        $('body').css(
+            'background', 'linear-gradient(to right,#0265df,#3e8dda)'
+        );
         function togglePw() {
             let txtPw = document.getElementById("txtPw"),
                 eyePw = document.getElementById("eyePw");
 
             if (txtPw.type === "password") {
                 txtPw.type = "text";
-                eyePw.className = "fas fa-eye-slash";
+                eyePw.className = "fas fa-unlock";
             } else {
                 txtPw.type = "password";
-                eyePw.className = "fas fa-eye";
+                eyePw.className = "fas fa-lock";
             }
         }
     </script>

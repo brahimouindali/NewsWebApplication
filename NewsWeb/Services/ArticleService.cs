@@ -25,8 +25,14 @@ namespace NewsWeb.Services
         }
 
         public IEnumerable<Article> GetArticles() =>
-         _article.Entity.GetAll().Where(a => a.IsVisible);
+                    _article.Entity.GetAll();
 
+        public IEnumerable<Article> GetArticlesVisible() =>
+                    GetArticles().Where(a => a.IsVisible);
+
+        public IEnumerable<Article> GetArticlesLast24h() =>
+                    GetArticlesVisible().Where(a=> DateTime.Now.Minute - a.PublishedAt.Minute <= 12 * 60);
+        
 
         public IEnumerable<Article> GetNewArticles() =>
             GetArticles().OrderByDescending(a => a.PublishedAt);
@@ -36,9 +42,9 @@ namespace NewsWeb.Services
             _article.Entity.Delete(id);
         }
 
-        public Article GetArticle(string id)=>
+        public Article GetArticle(string id) =>
              _article.Entity.GetById(id);
-        
+
 
         public void Update(Article article)
         {
@@ -50,19 +56,19 @@ namespace NewsWeb.Services
         {
             var categoryInDb = _category.Entity.GetAll();
             var category = categoryInDb.Where(c => c.Name == categoryName).FirstOrDefault();
-            var articleInDb = GetArticles();
+            var articleInDb = GetArticlesVisible();
             return articleInDb.Where(a => a.CategoryId == category.Id);
         }
 
         public IEnumerable<Article> ArticlesPlusLus() =>
-         GetArticles().OrderByDescending(a => a.NombreVisites).Take(5);
+         GetArticlesLast24h().OrderByDescending(a => a.NombreVisites).Take(5);
 
         public IEnumerable<Article> ArticlesPlusNote()
         {
             var ratings = _rating.Entity.GetAll();
             var artIds = ratings.OrderByDescending(r => r.Ratings).Select(r => r.ArticleId).Take(5);
-            
-            return GetArticles().Where(a => artIds.Contains(a.Id)).Take(5).ToList();
+
+            return GetArticlesLast24h().Where(a => artIds.Contains(a.Id)).Take(5).ToList();
         }
     }
 }

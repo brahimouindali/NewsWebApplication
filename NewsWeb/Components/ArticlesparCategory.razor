@@ -5,7 +5,7 @@
 
 @if (articles.Count() > 4)
 {
-     int i = 0; string link = $"articles/details/{articles[i].Id}"; 
+    int i = 0; string link = $"articles/details/{articles[i].Id}";
 
     <div class="container">
         <hr class="ligne-top" style="background-color: @bg_ligne_top[i]" />
@@ -60,6 +60,7 @@
         </div>
     </div>
 }
+
 @code {
     [Parameter] public string name { get; set; }
 
@@ -72,7 +73,11 @@
         return articles = articlesInDb.Take(5).ToList();
     }
 
-    protected override void OnInitialized()
+    //protected override void OnInitialized()
+    //{
+
+    //}
+    protected override async Task OnInitializedAsync()
     {
         GetArticles();
     }

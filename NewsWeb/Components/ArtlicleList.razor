@@ -50,7 +50,6 @@
     </ul>
 }
 
-
 @code {
     List<Article> articlesPlusLus = new List<Article>();
     List<Article> articlesPlusNote = new List<Article>();
@@ -84,7 +83,7 @@
         }
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await getArticles();
     }

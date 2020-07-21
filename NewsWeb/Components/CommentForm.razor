@@ -68,13 +68,12 @@ else
 
         <div class="form-group">
             <label for="comment">Detail</label>
-            <InputTextArea @bind-Value="Comment.CommentsDetail" Id="comment" class="form-control bg-gray" rows="9" />
-            @*<textarea @bind="Comment.CommentsDetail" id="comment" class="form-control bg-gray" rows="9"></textarea>*@
+            <InputTextArea @bind-Value="Comment.CommentsDetail" Id="comment" class="form-control bg-gray" rows="5" />
             <ValidationMessage For="@(() => Comment.CommentsDetail)" class="text-red" />
         </div>
 
         <div class="form-group">
-            <button type="submit" @onclick="Send" class="btn btn-send-comment">Commentaire</button>
+            <button type="submit" class="btn btn-send-comment">Commentaire</button>
         </div>
     </EditForm>
 </div>
@@ -92,16 +91,16 @@ else
     {
         Comment.ArticleId = Id;
         Comment.CommentAt = DateTime.Now;
+        Comment.IsVisible = false;
         Comment.Like = Comment.Deslike = 0;
         this.commentService.Insert(this.Comment);
-        this.comments.Add(this.Comment);
         hidden = "hidden";
         noneblock = "block";
     }
 
     async Task<List<Comment>> getComments()
     {
-        var commentsInDb = commentService.getAll();
+        var commentsInDb = commentService.getVisibleComments();
         return comments = commentsInDb.Where(a => a.ArticleId == Id).OrderBy(c => c.CommentAt).ToList();
     }
 

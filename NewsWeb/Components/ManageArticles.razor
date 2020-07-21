@@ -8,8 +8,10 @@
     <tr>
         <td>@article.Titre</td>
         <td>
-            @article.Content.Substring(0, 80)
-            <a href="articles/details/@article.Id">Read More</a>
+            @if (article.Content.Count() > 80)
+                @article.Content.Substring(0, 80)
+                else @article.Content
+            <a href="articles/details/@article.Id" target="_blank">Read More</a>
         </td>
         <td>@article.PublishedAt</td>
         <td>

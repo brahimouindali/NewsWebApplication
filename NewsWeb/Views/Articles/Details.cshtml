@@ -1,32 +1,31 @@
 ﻿@model ArticleCommentsViewModel
-@inject NewsWeb.Services.ArticleService articleService
-@inject NewsWeb.Services.CategoryService categoryService
+@inject ArticleService articleService
+@inject CategoryService categoryService
 
 @{
     ViewData["Title"] = Model.Article.Titre;
     var text = Model.Article.Content;
     var para = text.Split(".");
+    string date = Model.Article.PublishedAt.ToString("dd/MMMM/yyyy H:mm");
+    string id = Model.Article.Id;
 }
 
 <div class="row">
     <div class="col-lg-8 col-md-12 bg-white" style="padding: 20px 15px">
-        <div class="shadow-sm">
+        <div class="shadow-sm mb-2">
             <div style="padding: 0 15px">
-
                 <p class="titre-article">
                     @Html.DisplayFor(model => model.Article.Titre)
                 </p>
 
-                <div class="row" style="margin: 10px auto; display: flex; justify-content: space-between">
+                <div class="row alert alert-info">
                     <div class="col-sm name-time-category">
                         <i class="fa fa-user-edit">
                         </i>@Html.DisplayFor(model => model.Article.AppUser.FullName)
                     </div>
                     <div class="col-sm name-time-category" style="font-size: 12px">
                         <i class="fa fa-clock"></i>
-                        @{
-                            string date = Model.Article.PublishedAt.ToString("dd/MMMM/yyyy H:mm");
-                        }
+
                         <span>   @Html.DisplayFor(model => @date)</span>
                     </div>
                     <div class="col-sm name-time-category">
@@ -45,103 +44,110 @@
                     <img src="~/img/@Model.Article.ImageUrl" alt="@Model.Article.ImageUrl" style="width: 100%; margin: 0 auto" />
                 </div>
                 <div class="article-content">
-                    <p style="font-family: Georgia,Times," Times New Roman",serif !important;">
-                        @{ int i = 0;}
-
+                    @{ int i = 0;}
+                    <p style="font-family: Georgia,Times,'Times New Roman',serif !important;">
                         @foreach (var item in para)
                         {
                             if (i == 0)
                             {
-                                if (item != "")
+                            <p style="line-height: 1.6">
+                                @if (item != "")
                                 {
-                                <p style="line-height: 1.6">
                                     <strong>@item.</strong>
-                                </p>
-                            }
+                                }
+                            </p>
                             { i++; }
                         }
                         else
                         {
-                            if (item != "")
-                            {
-                                <p class="article-detail">@item.</p>
-                            }
-                            { i++; }
+                            <p class="article-detail">
+                                @if (item != "")
+                                    @item .
+                            </p>
                         }
                     }
                         </p>
+                    </div>
+
+                    <div class="row social-media">
+                        <div class="btn col-sm fb">
+                            <i class="fab fa-facebook"></i>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2Farticles%2Fdetails%2F@id&amp;src=sdkpreparse"
+                               class="fb-xfbml-parse-ignore">Share</a>
+                        </div>
+                        <div class="btn col-sm linkedin">
+                            <i class="fab fa-linkedin"></i>
+                            <a target="_blank" href="https://www.linkedin.com/sharing/share-offsite/?url=https://localhost:44315/articles/details/@id">Linkedin</a>
+                        </div>
+                        <div class="btn col-sm twitter">
+                            <i class="fab fa-twitter"></i>
+                            <a target="_blank" href="https://twitter.com/share?ref_src=https://localhost:44315/articles/details/@id" data-show-count="false">Tweet</a>
+                        </div>
+                        <div class="btn col-sm google-plus">
+                            <i class="fab fa-google-plus"></i>
+                            <a target="_blank" href="whatsapp://send?text=https://localhost:44315/articles/details/@id" data-action="share/whatsapp/share">Whatsapp</a>
+                        </div>
                     </div>
 
                 </div>
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    if (User.IsInRole(RoleName.AdminsRole))
-                    {
-                        <hr class="bg-info" />
-                        <div class="row">
-                            <div class="col-6">
+                    <hr class="bg-info" />
+                    <div class="row">
+                        @if (User.IsInRole(RoleName.WritersRole))
+                        {
+                            <div class="col-6 offset-2 mb-3">
                                 <span class="btn btn-info btn-sm btn-block">
                                     <a class="text-white" asp-action="edit" asp-route-id="@Model.Article.Id">Edit</a>
                                 </span>
                             </div>
-                            <div class="col-6">
+                        }
+                        @if (User.IsInRole(RoleName.EditorRole))
+                        {
+                            <div class="col-6 offset-2 mb-3">
                                 <span class="btn btn-danger btn-sm btn-block">
                                     <a data-toggle="modal" data-target="#exampleModal" style="cursor: pointer">Delete</a>
                                 </span>
                             </div>
-                        </div>
+                        }
+                    </div>
 
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
 
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">@Model.Article.Titre</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        êtes-vous sûr de vouloir supprimer cet article
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <form asp-action="Delete" asp-route-id="@Model.Article.Id">
-                                            <input type="submit" class="btn btn-danger" value="Delete" />
-                                        </form>
-                                    </div>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">@Model.Article.Titre</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    êtes-vous sûr de vouloir supprimer cet article
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <form asp-action="Delete" asp-route-id="@Model.Article.Id">
+                                        <input type="submit" class="btn btn-danger" value="Delete" />
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                    }
+                    </div>
                 }
+
             </div>
-            @if (!User.IsInRole(RoleName.AdminsRole) && !User.IsInRole(RoleName.EditorRole) && !User.IsInRole(RoleName.WritersRole))
-            {
-                <div class="row">
-                    <div class="col offset-5">
-                        @{ string id = Model.Article.Id; }
-                        <div class="fb-share-button" data-href="https://localhost:44315/articles/details/@id"
-                             data-layout="button_count" data-size="small">
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flocalhost%3A44315%2Farticles%2Fdetails%2F@id&amp;src=sdkpreparse"
-                               class="fb-xfbml-parse-ignore">Share</a>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <a class="twitter-share-button" target="_blank" href="https://twitter.com/share?url=https://localhost:44315/articles/details/@id">Tweet</a>
-                    </div>
-                </div>
-            }
             <div class="container">
                 @(await Html.RenderComponentAsync<CommentForm>(RenderMode.ServerPrerendered, new { Id = Model.Article.Id }))
             </div>
         </div>
 
         <div class="aside px-2 col-lg-4 col-md-3">
-            <div id="block-menu">
+            <span id="block-menu">
                 @(await Html.RenderComponentAsync<ArtlicleList>(RenderMode.ServerPrerendered))
-            </div>
+            </span>
         </div>
     </div>
 
@@ -150,14 +156,15 @@
         @if (categories.Count() > 0)
         {
             @foreach (var item in categories)
-
+            {
                 @(await Html.RenderComponentAsync<ArticlesparCategory>(RenderMode.ServerPrerendered, new { name = item.Name }))
-        }
+            }
         }
     </div>
 
-
     @section scripts{
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
         <script>
             $(document).scroll(function () {
                 checkOffset();

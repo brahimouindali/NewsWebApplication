@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms
+@using Data.Access.Library.Model
+@using NewsWeb.Services
+@inject ContactService contactService
+
+
+
+<div class="row offset-md-6">
+    <div class="mt-3">
+        <EditForm OnValidSubmit="Send" Model="@Contact">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <InputText @bind-Value="Contact.Nom" id="name" class="form-control bg-gray" placeholder="Jhon Doe" />
+                        <ValidationMessage For="@(() => Contact.Nom)" class="text-red" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-4">
+                        <InputText @bind-Value="Contact.Email" id="title" class="form-control bg-gray" placeholder="Email" />
+                        <ValidationMessage For="@(() => Contact.Email)" class="text-red" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-4">
+                <InputText @bind-Value="Contact.Object" class="form-control bg-gray" placeholder="Object" />
+                <ValidationMessage For="@(() => Contact.Object)" class="text-red" />
+            </div>
+
+            <div class="form-group mb-4">
+                <InputTextArea @bind-Value="Contact.Message" class="form-control bg-gray" rows="8" placeholder="Message" />
+                <ValidationMessage For="@(() => Contact.Message)" class="text-red" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" id="btn">Envoyer</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Contact Contact = new Contact();
+
+
+    void Send()
+    {
+        Contact.ContactAt = DateTime.Now;
+        contactService.Send(Contact);
+        this.Contact = new Contact
+        {
+            Email = "",
+            Message = "",
+            Nom = "",
+            Object = ""
+        };
+    }
+}

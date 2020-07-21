@@ -1,0 +1,47 @@
+﻿
+<style>
+    body {
+        background: linear-gradient(to right,#0265df,#3e8dda);
+        overflow: hidden;
+    }
+
+    #btn {
+        outline: none;
+        -webkit-appearance: none;
+        border: solid 1px #2dde98;
+        font-size: .9em;
+        cursor: pointer;
+        color: #ffffff;
+        padding: .6em 2.5em;
+        letter-spacing: 1px;
+        background: #2dde98;
+        /*margin: 1.5em 0 0 0;*/
+        transition: .5s all;
+        -webkit-transition: .5s all;
+        -moz-transition: .5s all;
+        -o-transition: .5s all;
+        -ms-transition: .5s all;
+    }
+
+    span.h3 {
+        position: absolute;
+        top: 83px;
+        left: 120px;
+        color: #fff;
+    }
+
+    footer {
+        display: none;
+    }
+</style>
+<span class="h3">Contact Us</span>
+
+@(await Html.RenderComponentAsync<ContactForm>(RenderMode.ServerPrerendered))
+
+@section scripts
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+            //$('footer').css('display', 'none');
+    </script>
+}
