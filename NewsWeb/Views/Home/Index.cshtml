@@ -34,6 +34,36 @@
             </a>
         </div>
     }
+    @if (User.IsInRole(RoleName.EditorRole))
+    {
+        <div class="col-lg-8 col-md-12">
+            <a class="btn btn-secondary btn-sm btn-block mb-2" data-toggle="modal" data-target="#categoryModal">
+                <i class="fa fa-user" aria-hidden="true"></i> New category
+            </a>
+        </div>
+        <div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form asp-action="create" asp-controller="category">
+                        <div class="modal-body">
+                            <input type="text" class="form-control" name="name" placeholder="category name :" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-secondary" value="Add" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <div class="row">

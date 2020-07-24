@@ -16,7 +16,9 @@ namespace BLL.UnitOfWork
         public IGenericRepository<T> Entity
         {
             get
-            { return _entity ?? (_entity = new GenericRepository<T>(_context)); }
+            {
+                return _entity ?? (_entity = new GenericRepository<T>(_context));
+            }
         }
 
         public void Save()

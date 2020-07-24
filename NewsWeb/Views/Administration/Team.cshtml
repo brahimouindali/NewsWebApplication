@@ -7,35 +7,50 @@
     var names = "";
 }
 
-    <style>
-        #equipe {
-            font-family: 'Encode Sans Condensed',sans-serif;
+<style>
+    #equipe {
+        font-family: 'Encode Sans Condensed',sans-serif;
+    }
+
+        #equipe h3 {
+            margin: 4px 0;
         }
 
-    </style>
+        ul{
+            list-style: none;
+        }
 
+    h3 {
+        color: #000;
+        opacity: 1;
+    }
+</style>
+<div style="margin-top: 100px;">
+    <h2>ÉQUIPE DE TRAVAIL</h2>
     <div id="equipe">
-        <h2>ÉQUIPE DE TRAVAIL</h2>
-        Administration:
-        @foreach (var admin in admins)
-        {
-            names += $"{admin.FullName} ";
-        }
-        <h3>@names</h3>
+        <h3>Administration : </h3>
+        <ul>
+            @foreach (var admin in admins)
+            {
+                <li>@admin.FullName</li>
+            }
+        </ul>
 
-        @{names = ""; }
-        Editeurs :
-        @foreach (var editeur in editeurs)
-        {
-            names += $"{editeur.FullName} ";
-        }
-        <h3>@names</h3>
+        <h3>Editeurs : </h3>
+        <ul>
+            @foreach (var editeur in editeurs)
+            {
+                <li>@editeur.FullName</li>
+            }
+        </ul>
 
-        @{names = ""; }
-        Journalistes :
-        @foreach (var journaliste in journalistes)
-        {
-            names = $"{journaliste.FullName} ";
-        }
-        <h3>@names</h3>
+        <h3>Journalistes : </h3>
+        <ul>
+            @foreach (var journaliste in journalistes)
+            {
+                <li>@journaliste.FullName</li>
+            }
+        </ul>
+        @* <h4>@names</h4>*@
     </div>
+</div>
